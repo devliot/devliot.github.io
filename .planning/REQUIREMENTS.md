@@ -1,0 +1,117 @@
+# Requirements: devliot
+
+**Defined:** 2026-04-09
+**Core Value:** Readers can consume well-formatted technical articles where code, math, diagrams, and charts render beautifully and are easy to follow.
+
+## v1 Requirements
+
+Requirements for initial release. Each maps to roadmap phases.
+
+### Infrastructure
+
+- [ ] **INFRA-01**: Site statique construit avec Lit.js web components
+- [ ] **INFRA-02**: Build Vite avec TypeScript
+- [ ] **INFRA-03**: Déploiement automatique via GitHub Pages + GitHub Actions
+- [ ] **INFRA-04**: Routing hash-based pour la SPA
+- [ ] **INFRA-05**: Layout responsive (mobile/tablette/desktop)
+
+### Branding
+
+- [ ] **BRAND-01**: Logo DEVLIOT stylé (inspiré du style OPENCODE)
+- [ ] **BRAND-02**: Design minimaliste, focus contenu, typographie soignée
+
+### Article Content
+
+- [ ] **ART-01**: Articles écrits en HTML dans des composants Lit
+- [ ] **ART-02**: Coloration syntaxique du code avec bouton copier (Shiki)
+- [ ] **ART-03**: Rendu de formules mathématiques (KaTeX)
+- [ ] **ART-04**: Support images avec légendes (figure/figcaption)
+- [ ] **ART-05**: Liens d'ancrage sur les titres (deep links)
+- [ ] **ART-06**: Diagrammes Mermaid (flowcharts, architecture, séquences)
+- [ ] **ART-07**: Graphiques de données Chart.js (courbes, histogrammes)
+
+### Navigation
+
+- [ ] **NAV-01**: Navigation par catégorie (IA, Java, Maths...)
+- [ ] **NAV-02**: Liste chronologique des articles (plus récent en premier)
+- [ ] **NAV-03**: Système de tags transversaux
+- [ ] **NAV-04**: Recherche full-text client-side
+
+### Metadata
+
+- [ ] **META-01**: Open Graph / Twitter Card tags par article
+- [ ] **META-02**: Temps de lecture estimé par article
+- [ ] **META-03**: Date de publication affichée
+
+## v2 Requirements
+
+Deferred to future release. Tracked but not in current roadmap.
+
+### UX Polish
+
+- **UX-01**: Dark mode avec détection système + toggle (nécessite thème Shiki, KaTeX, Mermaid)
+- **UX-02**: Table des matières sticky avec état actif au scroll
+- **UX-03**: Indicateur de progression de lecture
+- **UX-04**: Page 404 personnalisée
+- **UX-05**: Styles impression (print-friendly)
+
+### Discoverability
+
+- **DISC-01**: Sitemap.xml généré au build
+- **DISC-02**: Flux RSS / Atom généré au build
+- **DISC-03**: URL canonique par article
+- **DISC-04**: Navigation de séries d'articles (précédent/suivant)
+
+## Out of Scope
+
+Explicitly excluded. Documented to prevent scope creep.
+
+| Feature | Reason |
+|---------|--------|
+| Système de commentaires | Overhead de modération, spam, sécurité — blog en lecture seule |
+| CMS / admin panel | Le repo est le CMS ; git commit = publier |
+| Newsletter / email | RSS suffit pour un blog technique ; pas de RGPD à gérer |
+| Authentification / comptes | Blog public, pas de personnalisation |
+| Code exécutable interactif | Complexité sandbox trop élevée — liens vers playgrounds externes |
+| Recherche serveur | Site statique GitHub Pages — recherche client-side uniquement |
+| i18n multi-langue | Un seul auteur, une seule langue pour l'instant |
+| Analytics complets (GA4) | Pas de cookies / consentement RGPD ; privacy-first |
+| Génération dynamique d'images OG | Complexité serverless disproportionnée ; image statique par article |
+| Infinite scroll / pagination | Liste plate suffit ; pagination si > 50 articles |
+
+## Traceability
+
+Which phases cover which requirements. Updated during roadmap creation.
+
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| INFRA-01 | — | Pending |
+| INFRA-02 | — | Pending |
+| INFRA-03 | — | Pending |
+| INFRA-04 | — | Pending |
+| INFRA-05 | — | Pending |
+| BRAND-01 | — | Pending |
+| BRAND-02 | — | Pending |
+| ART-01 | — | Pending |
+| ART-02 | — | Pending |
+| ART-03 | — | Pending |
+| ART-04 | — | Pending |
+| ART-05 | — | Pending |
+| ART-06 | — | Pending |
+| ART-07 | — | Pending |
+| NAV-01 | — | Pending |
+| NAV-02 | — | Pending |
+| NAV-03 | — | Pending |
+| NAV-04 | — | Pending |
+| META-01 | — | Pending |
+| META-02 | — | Pending |
+| META-03 | — | Pending |
+
+**Coverage:**
+- v1 requirements: 21 total
+- Mapped to phases: 0
+- Unmapped: 21 ⚠️
+
+---
+*Requirements defined: 2026-04-09*
+*Last updated: 2026-04-09 after initial definition*
