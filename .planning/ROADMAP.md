@@ -29,7 +29,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Running `npm run build` produces a static output directory with no TypeScript errors
   3. Pushing to the main branch triggers GitHub Actions and the live GitHub Pages URL updates
   4. Navigating to a hash-based route (e.g. `/#/article/hello`) resolves without a 404
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 01-01-PLAN.md — Scaffold Vite + Lit + TypeScript project with dependencies, tsconfig, and global CSS tokens
+- [ ] 01-02-PLAN.md — App shell, HashRouter controller, header/footer/page components with hash-based routing
+- [ ] 01-03-PLAN.md — GitHub Actions deployment workflow for GitHub Pages (manual dispatch)
 **UI hint**: yes
 
 ### Phase 2: Design System
@@ -86,7 +90,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/? | Not started | - |
+| 1. Foundation | 0/3 | Planned | - |
 | 2. Design System | 0/? | Not started | - |
 | 3. Article Components | 0/? | Not started | - |
 | 4. Navigation & Discovery | 0/? | Not started | - |
