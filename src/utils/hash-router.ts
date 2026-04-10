@@ -53,7 +53,9 @@ export class HashRouter implements ReactiveController {
     const params: Record<string, string> = {};
     for (let i = 0; i < patternParts.length; i++) {
       if (patternParts[i].startsWith(':')) {
-        params[patternParts[i].slice(1)] = pathParts[i];
+        const value = pathParts[i];
+        if (!value) return null; // reject empty segments
+        params[patternParts[i].slice(1)] = decodeURIComponent(value);
       } else if (patternParts[i] !== pathParts[i]) {
         return null;
       }
