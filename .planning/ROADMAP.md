@@ -31,9 +31,9 @@ Decimal phases appear between their surrounding integers in numeric order.
   4. Navigating to a hash-based route (e.g. `/#/article/hello`) resolves without a 404
 **Plans:** 3 plans
 Plans:
-- [ ] 01-01-PLAN.md — Scaffold Vite + Lit + TypeScript project with dependencies, tsconfig, and global CSS tokens
-- [ ] 01-02-PLAN.md — App shell, HashRouter controller, header/footer/page components with hash-based routing
-- [ ] 01-03-PLAN.md — GitHub Actions deployment workflow for GitHub Pages (manual dispatch)
+- [x] 01-01-PLAN.md — Scaffold Vite + Lit + TypeScript project with dependencies, tsconfig, and global CSS tokens
+- [x] 01-02-PLAN.md — App shell, HashRouter controller, header/footer/page components with hash-based routing
+- [x] 01-03-PLAN.md — GitHub Actions deployment workflow for GitHub Pages (manual dispatch)
 **UI hint**: yes
 
 ### Phase 2: Design System
