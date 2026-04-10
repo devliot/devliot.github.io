@@ -43,14 +43,14 @@ test.describe('BRAND-02: Typography and Colors', () => {
     expect(fontFamily.toLowerCase()).toContain('fira code');
   });
 
-  test('accent color — links use #0077b6', async ({ page }) => {
+  test('accent color — links use #333333 (grayscale)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/');
     const header = page.locator('devliot-header');
     const link = header.locator('a');
     const color = await link.evaluate(el => getComputedStyle(el).color);
-    // #0077b6 = rgb(0, 119, 182)
-    expect(color).toBe('rgb(0, 119, 182)');
+    // #333333 = rgb(51, 51, 51)
+    expect(color).toBe('rgb(51, 51, 51)');
   });
 });
 
