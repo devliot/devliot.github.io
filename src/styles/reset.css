@@ -1,0 +1,41 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Colors — Phase 1 skeleton, Phase 2 overrides */
+  --color-surface: #ffffff;
+  --color-surface-alt: #f5f5f5;
+  --color-accent: #0000ee;
+
+  /* Spacing scale — multiples of 4 */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+
+  /* Typography — skeleton, Phase 2 overrides */
+  --font-family: system-ui, -apple-system, sans-serif;
+  --font-size-body: 16px;
+  --font-size-label: 14px;
+  --font-size-heading: 28px;
+  --font-weight-regular: 400;
+  --font-weight-semibold: 600;
+  --line-height-body: 1.5;
+  --line-height-heading: 1.2;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+  color: #1a1a1a;
+  background-color: var(--color-surface);
+}
