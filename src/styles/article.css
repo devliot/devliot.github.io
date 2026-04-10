@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+article {
+  padding: var(--space-lg);
+}
+
+h1 {
+  font-size: var(--font-size-heading);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-heading);
+  margin-bottom: var(--space-md);
+}
+
+p {
+  font-size: var(--font-size-body);
+  line-height: var(--line-height-body);
+}

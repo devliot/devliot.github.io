@@ -1,0 +1,18 @@
+:host {
+  display: flex;
+  align-items: center;
+  padding: var(--space-md);
+  background-color: var(--color-surface-alt);
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: var(--font-size-heading);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-heading);
+}
+
+a:hover {
+  text-decoration: underline;
+}
