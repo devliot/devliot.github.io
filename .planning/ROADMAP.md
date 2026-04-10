@@ -45,7 +45,10 @@ Plans:
   2. Typography is clean and content-focused — body text is readable at arm's length
   3. The site layout adapts correctly on a 375px mobile screen, a 768px tablet, and 1280px desktop
   4. No horizontal overflow or broken layout at any of the three breakpoints
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 02-01-PLAN.md — Install self-hosted fonts, update design tokens to DEVLIOT brand, set up Playwright E2E test infrastructure
+- [ ] 02-02-PLAN.md — ASCII art logo in header and hero, sticky header with hamburger, responsive layout, footer token fix
 **UI hint**: yes
 
 ### Phase 3: Article Components
@@ -91,7 +94,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 0/3 | Planned | - |
-| 2. Design System | 0/? | Not started | - |
+| 2. Design System | 0/2 | Planned | - |
 | 3. Article Components | 0/? | Not started | - |
 | 4. Navigation & Discovery | 0/? | Not started | - |
 | 5. Article Metadata | 0/? | Not started | - |
