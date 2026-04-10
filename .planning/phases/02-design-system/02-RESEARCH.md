@@ -577,7 +577,7 @@ No threat patterns apply to a CSS-only, static, self-hosted font phase.
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
 1. **Hamburger button placeholder — markup structure**
    - What we know: D-10 says a hamburger button placeholder should be present in the header, with functionality deferred to Phase 4.
