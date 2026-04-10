@@ -15,6 +15,8 @@ a {
   color: var(--color-accent);
   display: block;
   overflow: hidden;
+  min-width: 0;
+  flex-shrink: 1;
 }
 
 a:hover {
