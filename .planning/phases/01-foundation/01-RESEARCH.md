@@ -57,7 +57,7 @@ None — discussion stayed within phase scope.
 |----|-------------|------------------|
 | INFRA-01 | Site statique construit avec Lit.js web components | Lit 3.3.2 verified on npm. `create-vite --template lit-ts` scaffolds a working Lit component. App shell pattern documented in ARCHITECTURE.md. |
 | INFRA-02 | Build Vite avec TypeScript | Vite 8.0.8 + TypeScript 6.0.2 verified on npm. Official tsconfig for lit-ts template verified from GitHub raw source. `npm run build` runs `tsc && vite build`. |
-| INFRA-03 | Déploiement automatique via GitHub Pages + GitHub Actions | `workflow_dispatch`-only workflow verified. Required permissions: `pages: write`, `id-token: write`. Actions: `actions/configure-pages@v5`, `actions/upload-pages-artifact@v4`, `actions/deploy-pages@v4`. |
+| INFRA-03 | Deploiement automatique via GitHub Pages + GitHub Actions | `workflow_dispatch`-only workflow verified. Required permissions: `pages: write`, `id-token: write`. Actions: `actions/configure-pages@v5`, `actions/upload-pages-artifact@v4`, `actions/deploy-pages@v4`. |
 | INFRA-04 | Routing hash-based pour la SPA | `@lit-labs/router` hash routing is broken (issue #3517). Mitigation: custom `HashRouter` reactive controller using `hashchange` event. Pattern documented in Architecture Patterns section. |
 </phase_requirements>
 
@@ -530,15 +530,15 @@ export class DevliotArticlePage extends LitElement {
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **D-05 vs. hash routing reality:** The user locked `@lit-labs/router` (D-05) but the package cannot do hash routing natively. The recommended approach (custom `HashRouter` controller) satisfies the functional requirement but deviates from the literal decision. The planner should present this to the user as a confirming choice: "Use the custom HashRouter controller (recommended, no risk) vs. attempt @lit-labs/router with a shim (complex, fragile)."
+1. **D-05 vs. hash routing reality:** (RESOLVED) The user locked `@lit-labs/router` (D-05) but the package cannot do hash routing natively. The recommended approach (custom `HashRouter` controller) satisfies the functional requirement but deviates from the literal decision. Plan 01-02 includes a checkpoint:decision task (Task 0) that presents this deviation to the user for confirmation before implementation proceeds.
    - What we know: Issue #3517 is open; PRs #3603 and #4685 proposed fixes but their merge status is unconfirmed.
    - What's unclear: Whether the fix landed in 0.1.4 (our testing shows it has not).
-   - Recommendation: Default to custom controller; annotate in PLAN.md for user visibility.
+   - Resolution: Plan 01-02 Task 0 gates implementation on user approval of the custom controller approach.
 
-2. **GitHub Actions action versions:** The workflow uses specific action versions (`@v4`, `@v5`). These should be pinned to the latest stable at plan execution time, not frozen to research-time values.
-   - Recommendation: The executor should verify current versions via GitHub Marketplace before writing the workflow file.
+2. **GitHub Actions action versions:** (RESOLVED) The workflow uses specific action versions (`@v4`, `@v5`). These are pinned to the latest stable versions verified during research (2026-04-09). The executor should verify current versions via GitHub Marketplace before writing the workflow file if significant time has elapsed since research.
+   - Resolution: Versions verified on research date. Executor verifies at execution time per standard practice.
 
 ---
 
@@ -574,10 +574,10 @@ export class DevliotArticlePage extends LitElement {
 
 | Req ID | Behavior | Test Type | Automated Command | File Exists? |
 |--------|----------|-----------|-------------------|-------------|
-| INFRA-01 | Lit component renders in dev server | smoke | `npm run dev` (manual visual check) | ❌ Wave 0 — no test file; manual only |
-| INFRA-02 | `npm run build` produces dist/ with no TypeScript errors | build-gate | `npm run build` | ❌ Wave 0 — dist/ does not exist yet |
-| INFRA-03 | GitHub Actions workflow succeeds and Pages URL updates | e2e / manual | GitHub Actions UI (manual dispatch) | ❌ Wave 0 — workflow file does not exist yet |
-| INFRA-04 | `/#/article/hello` navigates without 404 | smoke | Manual: open browser, navigate to hash URL | ❌ Wave 0 — no automated hash routing test |
+| INFRA-01 | Lit component renders in dev server | smoke | `npm run dev` (manual visual check) | N/A |
+| INFRA-02 | `npm run build` produces dist/ with no TypeScript errors | build-gate | `npm run build` | N/A |
+| INFRA-03 | GitHub Actions workflow succeeds and Pages URL updates | e2e / manual | GitHub Actions UI (manual dispatch) | N/A |
+| INFRA-04 | `/#/article/hello` navigates without 404 | smoke | Manual: open browser, navigate to hash URL | N/A |
 
 ### Sampling Rate
 - **Per task commit:** `npm run build` (ensures TypeScript compiles cleanly)

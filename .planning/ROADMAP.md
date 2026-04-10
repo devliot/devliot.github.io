@@ -12,7 +12,7 @@ Start with a working Lit.js static site that builds and deploys to GitHub Pages,
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Foundation** - Working Lit.js site that builds and auto-deploys to GitHub Pages
+- [ ] **Phase 1: Foundation** - Working Lit.js site that builds and deploys to GitHub Pages via manual dispatch
 - [ ] **Phase 2: Design System** - Brand identity and responsive layout applied across the site
 - [ ] **Phase 3: Article Components** - Full article rendering (code, math, images, diagrams, charts)
 - [ ] **Phase 4: Navigation & Discovery** - Category nav, tag system, chronological listing, full-text search
@@ -21,13 +21,13 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Foundation
-**Goal**: A working Lit.js site compiles, runs locally, and auto-deploys to GitHub Pages on push
+**Goal**: A working Lit.js site compiles, runs locally, and deploys to GitHub Pages via manual dispatch
 **Depends on**: Nothing (first phase)
 **Requirements**: INFRA-01, INFRA-02, INFRA-03, INFRA-04
 **Success Criteria** (what must be TRUE):
   1. Running `npm run dev` serves the site locally with Lit.js components rendering
   2. Running `npm run build` produces a static output directory with no TypeScript errors
-  3. Pushing to the main branch triggers GitHub Actions and the live GitHub Pages URL updates
+  3. Manually triggering the GitHub Actions workflow deploys the site to the live GitHub Pages URL
   4. Navigating to a hash-based route (e.g. `/#/article/hello`) resolves without a 404
 **Plans:** 3 plans
 Plans:
