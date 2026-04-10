@@ -1,19 +1,55 @@
+/* Home page hero section — full-size ASCII art (D-01, D-02, D-03) */
 :host {
   display: block;
 }
 
 .hero {
-  padding: var(--space-lg);
+  padding: var(--space-2xl) var(--space-md);
+  text-align: center;
 }
 
-h1 {
-  font-size: var(--font-size-heading);
-  font-weight: var(--font-weight-semibold);
-  line-height: var(--line-height-heading);
-  margin-bottom: var(--space-md);
+.hero__logo-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-lg);
 }
 
-p {
+.logo {
+  font-family: var(--font-family-mono);
+  line-height: 1.0;
+  white-space: pre;
+  margin: 0;
+  padding: 0;
+  color: var(--color-text);
+  background-color: transparent;
+}
+
+.logo--hero {
+  font-size: 8px;
+}
+
+@media (min-width: 768px) {
+  .logo--hero {
+    font-size: 12px;
+  }
+
+  .hero {
+    padding: var(--space-3xl) var(--space-lg);
+  }
+}
+
+@media (min-width: 1280px) {
+  .logo--hero {
+    font-size: 14px;
+  }
+}
+
+.hero__tagline {
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+  max-width: 500px;
+  margin-inline: auto;
 }
