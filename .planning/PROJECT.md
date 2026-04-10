@@ -12,7 +12,8 @@ Readers can consume well-formatted technical articles where code, math, diagrams
 
 ### Validated
 
-(None yet — ship to validate)
+- [x] Static site built with Lit.js web components — Validated in Phase 1: Foundation
+- [x] Deployment via GitHub Pages — Validated in Phase 1: Foundation
 
 ### Active
 
@@ -81,4 +82,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-08 after initialization*
+*Last updated: 2026-04-10 after Phase 1 completion*
