@@ -1,8 +1,9 @@
+/* Footer — tokenized colors (fixes hardcoded #666 from Phase 1) */
 :host {
   display: block;
   padding: var(--space-md);
   background-color: var(--color-surface-alt);
   text-align: center;
   font-size: var(--font-size-label);
-  color: #666;
+  color: var(--color-text-muted);
 }
