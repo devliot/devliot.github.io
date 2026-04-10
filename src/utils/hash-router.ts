@@ -28,7 +28,9 @@ export class HashRouter implements ReactiveController {
 
   private _onHashChange = () => {
     const hash = window.location.hash;
-    this.currentPath = hash ? hash.slice(1) || '/' : '/';
+    const raw = hash ? hash.slice(1) || '/' : '/';
+    // Normalize: strip trailing slash (but keep root '/')
+    this.currentPath = raw.length > 1 && raw.endsWith('/') ? raw.slice(0, -1) : raw;
     this.host.requestUpdate();
   };
 
