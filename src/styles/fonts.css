@@ -1,0 +1,7 @@
+/* Self-hosted fonts via Fontsource (D-06, D-07, D-08) */
+/* Inter: body text — weights 400 (regular) and 600 (semibold) */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/600.css';
+
+/* Fira Code: code blocks and ASCII logo — weight 400 (regular) */
+@import '@fontsource/fira-code/400.css';
