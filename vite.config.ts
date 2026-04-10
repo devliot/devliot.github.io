@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: '/',
+  base: '/devliot/',
   build: {
     outDir: 'dist',
     target: 'es2023',
