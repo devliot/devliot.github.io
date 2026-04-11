@@ -1,0 +1,29 @@
+/* Inline math (default) — baseline aligned with surrounding text */
+:host {
+  display: inline;
+  vertical-align: baseline;
+}
+
+/* Block/display math — centered with vertical margins per UI-SPEC */
+:host([display]) {
+  display: block;
+  text-align: center;
+  margin: var(--space-xl) 0;
+  overflow-x: auto;
+}
+
+/* Error state — red, per UI-SPEC: KaTeX native error kept in place */
+.math-error {
+  color: #cc0000;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+}
+
+/* KaTeX output inherits font sizing from host context */
+.katex {
+  font-size: 1.1em;
+}
+
+:host([display]) .katex {
+  font-size: 1.3em;
+}
