@@ -45,7 +45,7 @@ Declared values (CSS custom properties from `reset.css` — unchanged from Phase
 Source: CONTEXT.md D-14 ("32-48px between major blocks, 16-24px between paragraphs"), `src/styles/reset.css`.
 
 Exceptions:
-- Inline code: `2px 4px` padding (2px vertical is a sub-4px exception, carried from Phase 2 `reset.css`)
+- Inline code padding: `--space-xs` (4px) on all sides. Note: `reset.css` from Phase 2 may contain a `2px 4px` rule — that is an inherited implementation detail not part of this phase's spacing contract. If it exists, it must be updated to `4px` vertical to stay on-grid.
 - Copy button touch target: minimum 44px × 44px (accessibility requirement, D-06)
 - Figure caption: `--space-sm` (8px) between image bottom edge and caption text
 
@@ -96,6 +96,12 @@ Accent reserved for: anchor `#` symbol (heading hover), clipboard icon on copy b
 
 ---
 
+## Visual Focal Point
+
+Primary focal point: article `<h1>` heading — the largest typographic element on the page (28px, weight 600), rendered at the top of the article body, anchors the reader's eye before prose begins.
+
+---
+
 ## Component Interaction Contracts
 
 ### `devliot-code` — Syntax-Highlighted Code Block
@@ -105,7 +111,7 @@ Accent reserved for: anchor `#` symbol (heading hover), clipboard icon on copy b
 | Default | Code block with `--color-surface-alt` background, Fira Code 14px, line numbers left column, language badge top-right |
 | Hover | Copy button appears in top-right corner (opacity 0 → 1), clipboard SVG icon, 44×44px touch target |
 | Copy click | Button shows "Copied!" text label (replaces icon), `--color-text-muted` color, returns to icon after 2000ms |
-| Copy error | Button shows "Error" text label (same treatment), silent fail — no alert |
+| Copy error | Button shows "Copy failed" text label (same treatment), silent fail — no alert |
 
 Source: CONTEXT.md D-06, D-07, D-08.
 
@@ -169,8 +175,9 @@ Source: CONTEXT.md D-13, REQUIREMENTS.md ART-04.
 | Element | Copy |
 |---------|------|
 | Copy button default | _(icon only — no text label)_ |
+| Copy button accessible label | `aria-label="Copy code"` (always present on the button element) |
 | Copy button success | "Copied!" |
-| Copy button error | "Error" |
+| Copy button error | "Copy failed" |
 | Figure caption prefix | "Figure N:" (auto-numbered via CSS counter) |
 | Heading anchor hover | "#" (single character, no tooltip) |
 | Diagram loading | _(no copy — silent load)_ |
