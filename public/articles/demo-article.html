@@ -1,0 +1,122 @@
+<h1>Article Components Demo</h1>
+
+<p>This demo article exercises every content type supported by the DEVLIOT blog platform. It serves as both a rendering proof and an authoring reference.</p>
+
+<h2>Code Highlighting</h2>
+
+<p>Inline code looks like this: <code>const x = 42</code>. Full code blocks use the <code>devliot-code</code> component with Shiki syntax highlighting:</p>
+
+<devliot-code lang="typescript">
+interface Article {
+  slug: string;
+  title: string;
+  date: string;
+  category: string;
+  tags: string[];
+}
+
+function getArticle(slug: string): Article | undefined {
+  const articles: Article[] = [];
+  return articles.find(a => a.slug === slug);
+}
+</devliot-code>
+
+<p>Python code works too:</p>
+
+<devliot-code lang="python">
+def fibonacci(n: int) -> list[int]:
+    """Generate the first n Fibonacci numbers."""
+    if n <= 0:
+        return []
+    sequence = [0, 1]
+    for i in range(2, n):
+        sequence.append(sequence[i-1] + sequence[i-2])
+    return sequence[:n]
+
+print(fibonacci(10))
+</devliot-code>
+
+<h2>Mathematical Formulas</h2>
+
+<p>Euler's identity is often cited as the most beautiful equation in mathematics: <devliot-math>e^{i\pi} + 1 = 0</devliot-math>. It connects five fundamental constants.</p>
+
+<p>The Gaussian integral evaluates to:</p>
+
+<devliot-math display>\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}</devliot-math>
+
+<p>The quadratic formula <devliot-math>x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}</devliot-math> is a classic result from algebra.</p>
+
+<h2>Images and Figures</h2>
+
+<figure>
+  <img src="https://via.placeholder.com/800x400/f8f9fa/333333?text=Technical+Diagram" alt="A placeholder technical diagram" />
+  <figcaption>A placeholder image demonstrating figure and caption rendering</figcaption>
+</figure>
+
+<h2>Diagrams</h2>
+
+<p>Mermaid diagrams render when they enter the viewport:</p>
+
+<devliot-diagram>
+graph TD
+    A[User Request] --> B{Router Match?}
+    B -->|Yes| C[Load Article HTML]
+    B -->|No| D[Show 404]
+    C --> E[Render via unsafeHTML]
+    E --> F[Auto-upgrade Custom Elements]
+    F --> G[Article Displayed]
+</devliot-diagram>
+
+<h3>Sequence Diagram</h3>
+
+<devliot-diagram>
+sequenceDiagram
+    participant Browser
+    participant ArticlePage
+    participant Server
+    Browser->>ArticlePage: Navigate to /#/article/slug
+    ArticlePage->>Server: fetch(/articles/slug.html)
+    Server-->>ArticlePage: HTML content
+    ArticlePage->>Browser: Render via unsafeHTML
+    Browser->>Browser: Auto-upgrade custom elements
+</devliot-diagram>
+
+<h2>Data Visualization</h2>
+
+<p>Chart.js charts also lazy-load on viewport entry:</p>
+
+<devliot-chart type="bar" config='{"type":"bar","data":{"labels":["TypeScript","Python","Java","Rust","Go"],"datasets":[{"label":"Articles Published","data":[12,8,6,4,3],"backgroundColor":["#1a1a1a","#333333","#666666","#999999","#cccccc"],"borderColor":"#1a1a1a","borderWidth":1}]},"options":{"responsive":true,"plugins":{"legend":{"display":false}}}}'></devliot-chart>
+
+<h2>Mixed Content</h2>
+
+<p>A real article combines text, code, and math seamlessly. Consider the time complexity of binary search: <devliot-math>O(\log n)</devliot-math>.</p>
+
+<devliot-code lang="java">
+public static int binarySearch(int[] arr, int target) {
+    int low = 0, high = arr.length - 1;
+    while (low <= high) {
+        int mid = low + (high - low) / 2;
+        if (arr[mid] == target) return mid;
+        else if (arr[mid] < target) low = mid + 1;
+        else high = mid - 1;
+    }
+    return -1;
+}
+</devliot-code>
+
+<blockquote>
+  <p>The best way to learn is to build something and then explain it to someone else.</p>
+</blockquote>
+
+<h3>Summary</h3>
+
+<p>This demo article has covered:</p>
+
+<ul>
+  <li>Syntax-highlighted code blocks with copy button</li>
+  <li>Inline and block mathematical formulas</li>
+  <li>Images with numbered figure captions</li>
+  <li>Mermaid flowcharts and sequence diagrams</li>
+  <li>Chart.js data visualizations</li>
+  <li>Heading anchor links on all sub-headings</li>
+</ul>
