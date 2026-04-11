@@ -1,0 +1,15 @@
+:host {
+  display: block;
+  margin: var(--space-xl) 0;
+}
+
+.chart-container {
+  position: relative;
+  max-width: 100%;
+  width: 100%;
+}
+
+canvas {
+  max-width: 100%;
+  width: 100%;
+}
