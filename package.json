@@ -17,7 +17,12 @@
     "@fontsource/fira-code": "^5.2.7",
     "@fontsource/inter": "^5.2.8",
     "@lit-labs/router": "^0.1.4",
-    "lit": "^3.3.2"
+    "@observablehq/plot": "^0.6.17",
+    "chart.js": "^4.5.1",
+    "katex": "^0.16.45",
+    "lit": "^3.3.2",
+    "mermaid": "^11.14.0",
+    "shiki": "^4.0.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.59.1",
