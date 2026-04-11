@@ -583,19 +583,19 @@ return html`<article>${unsafeHTML(this._articleHtml)}</article>`;
 
 ---
 
-## Open Questions
+## Open Questions (RESOLVED)
 
-1. **Heading anchors vs hash router conflict**
+1. **Heading anchors vs hash router conflict** — RESOLVED
    - What we know: The router uses `window.location.hash` entirely (e.g., `#/article/my-slug`). Heading anchors traditionally use `#heading-id` fragment.
    - What's unclear: Can both coexist? Appending `#heading-id` after the router hash (`#/article/my-slug#heading-id`) requires the router to parse and handle two-part hashes, or the anchor just copies the URL without navigation.
    - Recommendation: For Phase 3, anchor click = clipboard copy only (no URL change). The heading gets an `id` attribute for manual deep-linking. The router does not need to change.
 
-2. **Vite asset handling for article HTML files**
+2. **Vite asset handling for article HTML files** — RESOLVED
    - What we know: `public/` files are copied verbatim to `dist/`. `src/` files require explicit import to be bundled.
    - What's unclear: `D-03` says `src/articles/` — this conflicts with Vite's asset pipeline for fetched (non-imported) files.
    - Recommendation: Use `public/articles/` instead and update D-03 to reflect this. Treat `src/articles/` as the authoring location if needed, but document the `public/` distinction.
 
-3. **Shiki language set**
+3. **Shiki language set** — RESOLVED
    - What we know: Shiki 4 ships all languages; `codeToHtml()` lazy-loads on demand.
    - What's unclear: In a bundled Vite build, which languages are bundled vs fetched at runtime?
    - Recommendation: Use `codeToHtml()` shorthand (lazy loads on demand). For production, common languages (typescript, javascript, java, python, bash, json, html, css) will be fetched on first use and cached. No explicit language set needed.
