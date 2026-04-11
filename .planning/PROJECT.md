@@ -14,6 +14,7 @@ Readers can consume well-formatted technical articles where code, math, diagrams
 
 - [x] Static site built with Lit.js web components — Validated in Phase 1: Foundation
 - [x] Deployment via GitHub Pages — Validated in Phase 1: Foundation
+- [x] Minimalist, content-focused design — Validated in Phase 2: Design System (monochrome palette, responsive layout, brand typography)
 
 ### Active
 
@@ -82,4 +83,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-10 after Phase 1 completion*
+*Last updated: 2026-04-11 after Phase 2 completion*
