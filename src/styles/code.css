@@ -1,0 +1,11 @@
+/* Code block base styles — shared by devliot-code and article pre blocks */
+pre {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  background-color: var(--color-surface-alt);
+  border-radius: 4px;
+  padding: var(--space-md);
+  overflow-x: auto;
+  white-space: pre;
+  line-height: 1.5;
+}

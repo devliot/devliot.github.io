@@ -4,8 +4,10 @@
 
 article {
   padding: var(--space-lg);
+  counter-reset: figures;
 }
 
+/* Article title */
 h1 {
   font-size: var(--font-size-heading);
   font-weight: var(--font-weight-semibold);
@@ -13,7 +15,132 @@ h1 {
   margin-bottom: var(--space-md);
 }
 
+/* Sub-headings — per UI-SPEC: h2/h3 at 20px semibold */
+h2, h3 {
+  font-size: 20px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1.2;
+  margin-top: var(--space-2xl);
+  margin-bottom: var(--space-lg);
+  position: relative;
+}
+
+h4, h5, h6 {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-body);
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-md);
+  position: relative;
+}
+
+/* Paragraph spacing — per D-14: 16-24px between paragraphs */
 p {
   font-size: var(--font-size-body);
   line-height: var(--line-height-body);
+  margin-bottom: var(--space-md);
+}
+
+p + p {
+  margin-top: var(--space-md);
+}
+
+/* Major content blocks — per D-14: 32-48px between major blocks */
+figure,
+pre,
+.diagram-container,
+.chart-container,
+devliot-code,
+devliot-math[display],
+devliot-diagram,
+devliot-chart {
+  margin-top: var(--space-xl);
+  margin-bottom: var(--space-xl);
+}
+
+/* Figure auto-numbering — per D-13, CSS counters */
+figure {
+  counter-increment: figures;
+  margin: var(--space-xl) 0;
+  text-align: center;
+}
+
+figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+figcaption {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  margin-top: var(--space-sm);
+}
+
+figcaption::before {
+  content: 'Figure ' counter(figures) ': ';
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+}
+
+/* Heading anchor links — per D-12: hover-reveal # to the left */
+.heading-anchor {
+  position: absolute;
+  left: -1.5em;
+  color: var(--color-accent);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  cursor: pointer;
+  font-weight: var(--font-weight-regular);
+}
+
+h2:hover .heading-anchor,
+h3:hover .heading-anchor,
+h4:hover .heading-anchor,
+h5:hover .heading-anchor,
+h6:hover .heading-anchor,
+.heading-anchor:focus {
+  opacity: 1;
+}
+
+/* Lists inside articles */
+ul, ol {
+  padding-left: var(--space-lg);
+  margin-bottom: var(--space-md);
+}
+
+li {
+  margin-bottom: var(--space-xs);
+}
+
+/* Inline code */
+code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  background-color: var(--color-surface-alt);
+  padding: var(--space-xs);
+  border-radius: 4px;
+}
+
+/* Links */
+a:not(.heading-anchor) {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+/* Blockquote */
+blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: var(--space-md);
+  margin: var(--space-xl) 0;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Error state — per UI-SPEC copywriting */
+.error-state {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-lg);
+  color: var(--color-text-muted);
 }
