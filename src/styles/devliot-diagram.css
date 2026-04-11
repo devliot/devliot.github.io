@@ -1,0 +1,29 @@
+/* Diagram container — per UI-SPEC: 1px border, 16px padding, 32px margin */
+devliot-diagram {
+  display: block;
+  border: 1px solid #e0e0e0;
+  padding: var(--space-md);
+  margin: var(--space-xl) 0;
+  text-align: center;
+  min-height: 100px;
+  background-color: var(--color-surface);
+}
+
+devliot-diagram .diagram-svg-container {
+  display: flex;
+  justify-content: center;
+}
+
+devliot-diagram .diagram-svg-container svg {
+  max-width: 100%;
+  height: auto;
+}
+
+devliot-diagram .diagram-error {
+  color: #cc0000;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  padding: var(--space-md);
+  text-align: left;
+  white-space: pre-wrap;
+}

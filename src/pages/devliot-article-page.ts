@@ -4,13 +4,14 @@ import { customElement, property, state } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import articleStyles from '../styles/article.css?inline';
 import codeStyles from '../styles/code.css?inline';
+import diagramStyles from '../styles/devliot-diagram.css?inline';
 
 /** Allowlist: only alphanumeric characters, hyphens, and underscores (T-03-02: path traversal prevention). */
 const SLUG_PATTERN = /^[a-zA-Z0-9_-]+$/;
 
 @customElement('devliot-article-page')
 export class DevliotArticlePage extends LitElement {
-  static styles = [unsafeCSS(articleStyles), unsafeCSS(codeStyles)];
+  static styles = [unsafeCSS(articleStyles), unsafeCSS(codeStyles), unsafeCSS(diagramStyles)];
 
   @property({ type: String }) slug = '';
 
