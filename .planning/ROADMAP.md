@@ -47,8 +47,8 @@ Plans:
   4. No horizontal overflow or broken layout at any of the three breakpoints
 **Plans:** 2 plans
 Plans:
-- [ ] 02-01-PLAN.md — Install self-hosted fonts, update design tokens to DEVLIOT brand, set up Playwright E2E test infrastructure
-- [ ] 02-02-PLAN.md — ASCII art logo in header and hero, sticky header with hamburger, responsive layout, footer token fix
+- [x] 02-01-PLAN.md — Install self-hosted fonts, update design tokens to DEVLIOT brand, set up Playwright E2E test infrastructure
+- [x] 02-02-PLAN.md — ASCII art logo in header and hero, sticky header with hamburger, responsive layout, footer token fix
 **UI hint**: yes
 
 ### Phase 3: Article Components
