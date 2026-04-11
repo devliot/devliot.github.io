@@ -1,0 +1,125 @@
+:host {
+  display: block;
+  margin: var(--space-xl) 0;
+}
+
+.code-block {
+  position: relative;
+  background-color: var(--color-surface-alt);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Language badge — per D-07, top-right, always visible */
+.lang-badge {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  font-size: 11px;
+  font-family: var(--font-family-mono);
+  color: var(--color-text-muted);
+  background-color: var(--color-surface);
+  padding: 2px var(--space-sm);
+  border-radius: 3px;
+  z-index: 2;
+  user-select: none;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+/* Copy button — per D-06: appears on hover, top-right, 44x44 touch target */
+.copy-btn {
+  position: absolute;
+  top: var(--space-sm);
+  right: calc(var(--space-sm) + 60px); /* offset from lang badge */
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-surface);
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 2;
+  padding: 0;
+  color: var(--color-accent);
+}
+
+.code-block:hover .copy-btn {
+  opacity: 1;
+}
+
+.copy-btn:focus-visible {
+  opacity: 1;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.copy-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.copy-feedback {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+  padding: 0 var(--space-xs);
+}
+
+.copy-feedback--error {
+  color: #cc0000;
+}
+
+/* Expand copy button width when showing text feedback */
+.copy-btn:has(.copy-feedback) {
+  width: auto;
+  padding: 0 var(--space-sm);
+}
+
+/* Shiki pre/code styling overrides */
+.code-block pre.shiki {
+  margin: 0;
+  padding: var(--space-md);
+  padding-top: calc(var(--space-md) + var(--space-xl)); /* space for badge/button row */
+  background-color: var(--color-surface-alt) !important; /* override Shiki inline bg */
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.code-block pre.shiki code {
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  background: none;
+  padding: 0;
+}
+
+/* Line numbers via CSS counter — per D-07 */
+.code-block pre.shiki code {
+  counter-reset: step;
+}
+
+.code-block pre.shiki .line::before {
+  content: counter(step);
+  counter-increment: step;
+  display: inline-block;
+  width: 2.5rem;
+  margin-right: var(--space-sm);
+  color: var(--color-text-muted);
+  text-align: right;
+  user-select: none;
+  opacity: 0.5;
+}
+
+/* Fallback pre (before Shiki loads) */
+.code-block pre:not(.shiki) {
+  padding: var(--space-md);
+  padding-top: calc(var(--space-md) + var(--space-xl));
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-label);
+  overflow-x: auto;
+  white-space: pre;
+}
