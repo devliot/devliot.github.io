@@ -63,10 +63,10 @@ Plans:
   5. A Mermaid diagram and a Chart.js chart both render correctly inside an article
 **Plans:** 4 plans
 Plans:
-- [ ] 03-01-PLAN.md — Install dependencies, article page HTML renderer, heading anchors, figure CSS, spacing
-- [ ] 03-02-PLAN.md — devliot-code (Shiki syntax highlighting, copy button) and devliot-math (KaTeX formulas)
-- [ ] 03-03-PLAN.md — devliot-diagram (Mermaid, lazy, light DOM) and devliot-chart (Chart.js, lazy)
-- [ ] 03-04-PLAN.md — Demo article, article registry, Playwright E2E tests, visual verification
+- [x] 03-01-PLAN.md — Install dependencies, article page HTML renderer, heading anchors, figure CSS, spacing
+- [x] 03-02-PLAN.md — devliot-code (Shiki syntax highlighting, copy button) and devliot-math (KaTeX formulas)
+- [x] 03-03-PLAN.md — devliot-diagram (Mermaid, lazy, light DOM) and devliot-chart (Chart.js, lazy)
+- [x] 03-04-PLAN.md — Demo article, article registry, Playwright E2E tests, visual verification
 **UI hint**: yes
 
 ### Phase 4: Navigation & Discovery
