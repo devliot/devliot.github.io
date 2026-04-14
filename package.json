@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/build-search-index.mjs && tsc && vite build",
+    "build": "node scripts/build-og-pages.mjs --enrich && node scripts/build-search-index.mjs && tsc && vite build && node scripts/build-og-pages.mjs --generate",
     "preview": "vite preview",
     "test-e2e": "npx playwright test --project=chromium"
   },
