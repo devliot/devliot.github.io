@@ -17,16 +17,26 @@ export class DevliotHomePage extends LitElement {
 
   @state() private _articles: Article[] = [];
   @state() private _activeTag: string | null = null;
+  @state() private _searchMatchSlugs: Set<string> | null = null;
+
+  // FlexSearch state (not reactive)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private _searchIndex: any = null;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private _searchData: any[] | null = null;
+  private _searchDebounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   connectedCallback() {
     super.connectedCallback();
     this._fetchArticles();
     window.addEventListener('hashchange', this._onHashChange);
+    document.addEventListener('devliot-search', this._onSearch as unknown as EventListener);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     window.removeEventListener('hashchange', this._onHashChange);
+    document.removeEventListener('devliot-search', this._onSearch as unknown as EventListener);
   }
 
   private async _fetchArticles(): Promise<void> {
@@ -40,13 +50,26 @@ export class DevliotHomePage extends LitElement {
       // Fetch failure — articles remain empty
     }
 
-    // Read initial tag from URL after fetch
+    // Read initial tag and query from URL after fetch
     const hash = window.location.hash.slice(1) || '/';
     const qIdx = hash.indexOf('?');
     if (qIdx !== -1) {
       const params = new URLSearchParams(hash.slice(qIdx + 1));
       const tag = params.get('tag');
       if (tag) this._activeTag = tag;
+
+      const q = params.get('q');
+      if (q) {
+        this._searchQuery = q;
+        // Trigger search after a small delay to allow component to render first
+        setTimeout(async () => {
+          await this._initSearch();
+          if (this._searchIndex) {
+            const raw = this._searchIndex.search(q, { limit: 50 });
+            this._searchMatchSlugs = new Set(raw.flatMap((r: { field: string; result: string[] }) => r.result));
+          }
+        }, 100);
+      }
     }
   }
 
@@ -56,9 +79,54 @@ export class DevliotHomePage extends LitElement {
     if (qIdx !== -1) {
       const params = new URLSearchParams(hash.slice(qIdx + 1));
       this._activeTag = params.get('tag');
+      // Do not clear search from hashchange — search is managed by header events
     } else {
       this._activeTag = null;
     }
+  };
+
+  private async _initSearch(): Promise<void> {
+    if (this._searchIndex) return;
+    try {
+      const { Document } = await import('flexsearch');
+      const res = await fetch(`${import.meta.env.BASE_URL}search-data.json`);
+      if (!res.ok) return;
+      this._searchData = await res.json();
+      this._searchIndex = new Document({
+        document: {
+          id: 'slug',
+          index: [
+            { field: 'title', tokenize: 'forward' },
+            { field: 'body', tokenize: 'strict' },
+            { field: 'tags', tokenize: 'strict' },
+          ],
+        },
+      });
+      for (const entry of this._searchData!) {
+        this._searchIndex.add(entry);
+      }
+    } catch {
+      // Search init failure — search will be non-functional, article list still works
+    }
+  }
+
+  private _onSearch = async (e: CustomEvent<{ query: string }>) => {
+    const query = e.detail.query;
+
+    if (this._searchDebounceTimer) clearTimeout(this._searchDebounceTimer);
+
+    if (!query.trim()) {
+      this._searchMatchSlugs = null;
+      return;
+    }
+
+    this._searchDebounceTimer = setTimeout(async () => {
+      await this._initSearch();
+      if (!this._searchIndex) return;
+      const raw = this._searchIndex.search(query, { limit: 50 });
+      const slugs = new Set<string>(raw.flatMap((r: { field: string; result: string[] }) => r.result));
+      this._searchMatchSlugs = slugs;
+    }, 200);
   };
 
   private get _allTags(): string[] {
@@ -71,13 +139,18 @@ export class DevliotHomePage extends LitElement {
   }
 
   private get _filteredArticles(): Article[] {
-    const active = this._activeTag;
-    const articles = active
-      ? this._articles.filter(
-          (a) => a.tags.includes(active) || a.category === active
-        )
-      : [...this._articles];
-    return articles.sort((a, b) => b.date.localeCompare(a.date));
+    let result = [...this._articles];
+    // Tag filter
+    if (this._activeTag) {
+      result = result.filter(a => a.tags.includes(this._activeTag!) || a.category === this._activeTag);
+    }
+    // Search filter (AND logic with tag filter)
+    if (this._searchMatchSlugs !== null) {
+      result = result.filter(a => this._searchMatchSlugs!.has(a.slug));
+    }
+    // Sort newest first
+    result.sort((a, b) => b.date.localeCompare(a.date));
+    return result;
   }
 
   private _setActiveTag(tag: string | null): void {
@@ -123,7 +196,7 @@ export class DevliotHomePage extends LitElement {
 
       <section class="article-list">
         <ul class="article-rows" aria-live="polite">
-          ${filtered.length === 0 && this._articles.length > 0
+          ${filtered.length === 0 && (this._articles.length > 0 || this._searchMatchSlugs !== null)
             ? html`<p class="empty-state">No articles found.</p>`
             : map(filtered, (article) => html`
               <li class="article-row">
