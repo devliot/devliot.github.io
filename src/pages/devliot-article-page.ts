@@ -19,6 +19,8 @@ export class DevliotArticlePage extends LitElement {
   @state() private _error = '';
   @state() private _tags: string[] = [];
   @state() private _category = '';
+  @state() private _date = '';
+  @state() private _readingTime = 0;
 
   connectedCallback() {
     super.connectedCallback();
@@ -85,6 +87,8 @@ export class DevliotArticlePage extends LitElement {
         if (meta) {
           this._tags = meta.tags || [];
           this._category = meta.category || '';
+          this._date = meta.date || '';
+          this._readingTime = meta.readingTime || 0;
         }
       }
     } catch {
@@ -132,6 +136,16 @@ export class DevliotArticlePage extends LitElement {
     });
   }
 
+  private _formatDate(iso: string): string {
+    // Append T12:00:00 to avoid UTC midnight timezone shift (RESEARCH.md Pitfall 2)
+    const d = new Date(`${iso}T12:00:00`);
+    return new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }).format(d);
+  }
+
   private _scrollToSectionFromUrl(): void {
     const search = window.location.search;
     const params = new URLSearchParams(search);
@@ -152,6 +166,11 @@ export class DevliotArticlePage extends LitElement {
       return html`<article class="error-state"><p>${this._error}</p></article>`;
     }
     return html`
+      ${this._date || this._readingTime > 0 ? html`
+        <p class="article-meta">
+          ${this._date ? html`<time datetime="${this._date}">${this._formatDate(this._date)}</time>` : ''}${this._date && this._readingTime > 0 ? html`\u00a0\u00b7\u00a0` : ''}${this._readingTime > 0 ? html`${this._readingTime} min read` : ''}
+        </p>
+      ` : ''}
       <article>${unsafeHTML(this._html)}</article>
       ${this._tags.length > 0 || this._category ? html`
         <nav class="article-tags" aria-label="Article tags">
