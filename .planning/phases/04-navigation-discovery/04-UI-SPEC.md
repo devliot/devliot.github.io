@@ -1,7 +1,7 @@
 ---
 phase: 4
 slug: navigation-discovery
-status: draft
+status: approved
 shadcn_initialized: false
 preset: none
 created: 2026-04-14
@@ -280,11 +280,11 @@ No third-party registries. All components are hand-authored Lit elements with cu
 
 ## Checker Sign-Off
 
-- [ ] Dimension 1 Copywriting: PASS
-- [ ] Dimension 2 Visuals: PASS
-- [ ] Dimension 3 Color: PASS
-- [ ] Dimension 4 Typography: PASS
-- [ ] Dimension 5 Spacing: PASS
-- [ ] Dimension 6 Registry Safety: PASS
+- [x] Dimension 1 Copywriting: PASS
+- [x] Dimension 2 Visuals: FLAG — no focal point declared for primary screen (non-blocking)
+- [x] Dimension 3 Color: FLAG — hover state #eeeeee not mapped to CSS token (non-blocking)
+- [x] Dimension 4 Typography: PASS
+- [x] Dimension 5 Spacing: PASS
+- [x] Dimension 6 Registry Safety: PASS
 
-**Approval:** pending
+**Approval:** approved 2026-04-14
