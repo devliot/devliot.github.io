@@ -19,17 +19,18 @@ Readers can consume well-formatted technical articles where code, math, diagrams
 - [x] Chronological article listing (newest first) — Validated in Phase 4: Navigation & Discovery (reverse-chronological sort)
 - [x] Tag system across articles — Validated in Phase 4: Navigation & Discovery (clickable tags on article pages, filter chips on home)
 - [x] Search functionality within articles — Validated in Phase 4: Navigation & Discovery (FlexSearch full-text search in sticky header)
+- [x] Open Graph meta tags per article — Validated in Phase 5: Article Metadata (build-time OG HTML generation with og:title, og:description, og:image, twitter:card)
+- [x] Reading time per article — Validated in Phase 5: Article Metadata (computed at 238 WPM, displayed in metadata line)
+- [x] Publication date per article — Validated in Phase 5: Article Metadata (Intl.DateTimeFormat long format with <time> element)
 
 ### Active
 
-- [ ] Static site built with Lit.js web components
 - [ ] Articles written in HTML within Lit components
 - [ ] Code syntax highlighting (Prism or Highlight.js)
 - [ ] Mathematical formulas rendering (KaTeX or MathJax)
 - [ ] Image support in articles
 - [ ] Diagram support (Mermaid — flowcharts, architecture diagrams)
 - [ ] Data visualization support (charts, curves, histograms)
-- [ ] Minimalist, content-focused design
 - [ ] Deployment via GitHub Pages
 
 ### Out of Scope
@@ -83,4 +84,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-14 after Phase 4 completion*
+*Last updated: 2026-04-14 after Phase 5 completion*
