@@ -60,7 +60,6 @@ export class DevliotHomePage extends LitElement {
 
       const q = params.get('q');
       if (q) {
-        this._searchQuery = q;
         // Trigger search after a small delay to allow component to render first
         setTimeout(async () => {
           await this._initSearch();
