@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A custom-built static technical blog powered by Lit.js web components, deployed on GitHub Pages. It publishes instructional articles covering code (AI, Java, etc.), mathematical formulas, images, and data visualizations. The site is handcrafted — no framework, no CMS — just lightweight web components serving rich technical content.
+A custom-built static technical blog powered by Lit.js web components, deployed on GitHub Pages. It publishes instructional articles covering code (AI, Java, etc.), mathematical formulas, images, and data visualizations. The site is handcrafted — no framework, no CMS — just lightweight web components serving rich technical content. v1.0 shipped with full article rendering (Shiki, KaTeX, Mermaid, Chart.js), navigation/search, and social sharing metadata.
 
 ## Core Value
 
@@ -12,44 +12,52 @@ Readers can consume well-formatted technical articles where code, math, diagrams
 
 ### Validated
 
-- [x] Static site built with Lit.js web components — Validated in Phase 1: Foundation
-- [x] Deployment via GitHub Pages — Validated in Phase 1: Foundation
-- [x] Minimalist, content-focused design — Validated in Phase 2: Design System (monochrome palette, responsive layout, brand typography)
-- [x] Navigation by category (IA, Java, Maths, etc.) — Validated in Phase 4: Navigation & Discovery (filter chips with tag/category unification)
-- [x] Chronological article listing (newest first) — Validated in Phase 4: Navigation & Discovery (reverse-chronological sort)
-- [x] Tag system across articles — Validated in Phase 4: Navigation & Discovery (clickable tags on article pages, filter chips on home)
-- [x] Search functionality within articles — Validated in Phase 4: Navigation & Discovery (FlexSearch full-text search in sticky header)
-- [x] Open Graph meta tags per article — Validated in Phase 5: Article Metadata (build-time OG HTML generation with og:title, og:description, og:image, twitter:card)
-- [x] Reading time per article — Validated in Phase 5: Article Metadata (computed at 238 WPM, displayed in metadata line)
-- [x] Publication date per article — Validated in Phase 5: Article Metadata (Intl.DateTimeFormat long format with <time> element)
+- [x] Static site built with Lit.js web components — v1.0 Phase 1
+- [x] Vite build with TypeScript — v1.0 Phase 1
+- [x] Deployment via GitHub Pages + GitHub Actions — v1.0 Phase 1
+- [x] Hash-based SPA routing — v1.0 Phase 1
+- [x] Responsive layout (mobile/tablet/desktop) — v1.0 Phase 2
+- [x] DEVLIOT brand logo (ASCII art) — v1.0 Phase 2
+- [x] Minimalist, content-focused design with monochrome palette — v1.0 Phase 2
+- [x] Articles written in HTML within Lit components — v1.0 Phase 3
+- [x] Code syntax highlighting with copy button (Shiki) — v1.0 Phase 3
+- [x] Mathematical formulas rendering (KaTeX) — v1.0 Phase 3
+- [x] Image support with captions (figure/figcaption) — v1.0 Phase 3
+- [x] Heading anchor links (deep links) — v1.0 Phase 3
+- [x] Mermaid diagrams (flowcharts, architecture, sequences) — v1.0 Phase 3
+- [x] Chart.js data visualization (bar, line, scatter) — v1.0 Phase 3
+- [x] Navigation by category (filter chips) — v1.0 Phase 4
+- [x] Chronological article listing (newest first) — v1.0 Phase 4
+- [x] Tag system across articles — v1.0 Phase 4
+- [x] Full-text client-side search (FlexSearch) — v1.0 Phase 4
+- [x] Open Graph / Twitter Card tags per article — v1.0 Phase 5
+- [x] Reading time per article (238 WPM) — v1.0 Phase 5
+- [x] Publication date displayed — v1.0 Phase 5
 
 ### Active
 
-- [ ] Articles written in HTML within Lit components
-- [ ] Code syntax highlighting (Prism or Highlight.js)
-- [ ] Mathematical formulas rendering (KaTeX or MathJax)
-- [ ] Image support in articles
-- [ ] Diagram support (Mermaid — flowcharts, architecture diagrams)
-- [ ] Data visualization support (charts, curves, histograms)
-- [ ] Deployment via GitHub Pages
+(None — all v1.0 requirements shipped. Next milestone will define new requirements.)
 
 ### Out of Scope
 
-- CMS / admin panel — content is managed via code in the repo
-- Comments system — v1 is read-only
-- Newsletter / email subscriptions — not needed for initial release
-- Authentication — public blog, no user accounts
-- Interactive/executable code blocks — v1 is syntax highlight only
-- Server-side rendering — fully static site
-- Multi-language i18n — articles in one language at a time
+- CMS / admin panel — the repo is the CMS; git commit = publish
+- Comments system — blog is read-only, no moderation overhead
+- Newsletter / email subscriptions — RSS planned for v2; no GDPR burden
+- Authentication / user accounts — public blog, no personalization
+- Interactive/executable code blocks — sandbox complexity too high; link to external playgrounds
+- Server-side rendering — fully static GitHub Pages site
+- Multi-language i18n — single author, single language
+- Analytics (GA4) — privacy-first, no cookies/consent
+- Dynamic OG image generation — serverless complexity disproportionate; static images per article
+- Infinite scroll / pagination — flat list sufficient until > 50 articles
 
-## Context
+## Current State
 
-- The author (Eliott) is experienced with Lit.js and wants to use it
-- Articles are HTML authored directly in Lit components — no Markdown pipeline
-- Target audience: developers and students learning AI, Java, mathematics, and related topics
-- Hosted on GitHub — the repo itself is the content management system
-- GitHub Pages handles deployment, likely with a build step to bundle Lit components
+Shipped v1.0 MVP on 2026-04-14.
+- 2,716 source LOC (TypeScript, CSS, HTML, ESM scripts)
+- Tech stack: Lit 3.3.1, Vite 8, Shiki 4, KaTeX 0.16, Mermaid 11, Chart.js 4, FlexSearch 0.7
+- 41 Playwright E2E tests across 5 test files
+- 1 demo article (`01-demo-article`) showcasing all content types
 
 ## Constraints
 
@@ -62,26 +70,32 @@ Readers can consume well-formatted technical articles where code, math, diagrams
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Lit.js over frameworks (React, Vue, Astro) | Author's expertise + lightweight web components | — Pending |
-| HTML over Markdown for articles | Full control over rendering, no conversion pipeline | — Pending |
-| GitHub Pages over Netlify/Vercel | Simplicity, free, directly tied to repo | — Pending |
+| Lit.js over frameworks (React, Vue, Astro) | Author's expertise + lightweight web components | Good — clean component model, fast builds |
+| HTML over Markdown for articles | Full control over rendering, no conversion pipeline | Good — enables custom components inline |
+| GitHub Pages over Netlify/Vercel | Simplicity, free, directly tied to repo | Good — zero cost, simple deploy |
+| Shiki over Prism/Highlight.js | VS Code-grade accuracy, build-time rendering | Good — accurate highlighting, lazy-loaded |
+| KaTeX over MathJax | Synchronous, lighter, simpler integration | Good — fast inline/block math |
+| Hash-based routing over path-based | GitHub Pages SPA compat without 404.html hacks | Good — simple, reliable |
+| FlexSearch over Lunr | Fastest client-side search, build-time indexing | Good — instant results |
+| Build-time OG HTML over serverless | No runtime dependency, crawlers get static HTML | Good — zero infrastructure |
+| Monochrome grayscale palette | Content-focused, no color distractions | Good — clean aesthetic |
 
 ## Evolution
 
 This document evolves at phase transitions and milestone boundaries.
 
-**After each phase transition** (via `/gsd-transition`):
+**After each phase transition:**
 1. Requirements invalidated? → Move to Out of Scope with reason
 2. Requirements validated? → Move to Validated with phase reference
 3. New requirements emerged? → Add to Active
 4. Decisions to log? → Add to Key Decisions
 5. "What This Is" still accurate? → Update if drifted
 
-**After each milestone** (via `/gsd-complete-milestone`):
+**After each milestone:**
 1. Full review of all sections
 2. Core Value check — still the right priority?
 3. Audit Out of Scope — reasons still valid?
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-14 after Phase 5 completion*
+*Last updated: 2026-04-14 after v1.0 milestone*
