@@ -2,11 +2,12 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import katex from 'katex';
+import katexStyles from 'katex/dist/katex.min.css?inline';
 import styles from '../styles/devliot-math.css?inline';
 
 @customElement('devliot-math')
 export class DevliotMath extends LitElement {
-  static styles = unsafeCSS(styles);
+  static styles = [unsafeCSS(katexStyles), unsafeCSS(styles)];
 
   @state() private _rendered = '';
 

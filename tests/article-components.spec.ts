@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // All tests navigate to the demo article
-const DEMO_URL = '/#/article/demo-article';
+const DEMO_URL = '/#/article/01-demo-article';
 
 test.describe('Article Components (Phase 3)', () => {
 

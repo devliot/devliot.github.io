@@ -1,7 +1,7 @@
 {
   "articles": [
     {
-      "slug": "demo-article",
+      "slug": "01-demo-article",
       "title": "Article Components Demo",
       "date": "2026-04-11",
       "category": "Tutorial",

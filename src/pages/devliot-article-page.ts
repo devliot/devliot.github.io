@@ -52,11 +52,19 @@ export class DevliotArticlePage extends LitElement {
     this._html = '';
 
     try {
-      const url = `${import.meta.env.BASE_URL}articles/${this.slug}.html`;
+      const url = `${import.meta.env.BASE_URL}articles/${this.slug}/index.html`;
       const res = await fetch(url);
 
       if (res.ok) {
-        this._html = await res.text();
+        const text = await res.text();
+        // Guard against Vite SPA fallback: if the response is the app shell
+        // (contains <!DOCTYPE or <devliot-app>), treat as 404 to prevent
+        // recursive rendering.
+        if (text.trimStart().startsWith('<!DOCTYPE') || text.includes('<devliot-app')) {
+          this._error = 'Article not found.';
+          return;
+        }
+        this._html = text;
       } else if (res.status === 404) {
         this._error = 'Article not found.';
       } else {
