@@ -154,8 +154,10 @@ export class DevliotHomePage extends LitElement {
   }
 
   private _setActiveTag(tag: string | null): void {
-    this._activeTag = tag;
-    const hash = tag ? `/?tag=${encodeURIComponent(tag)}` : '/';
+    // Toggle: clicking the active tag deactivates it
+    const next = (tag !== null && this._activeTag === tag) ? null : tag;
+    this._activeTag = next;
+    const hash = next ? `/?tag=${encodeURIComponent(next)}` : '/';
     window.location.hash = hash;
   }
 
