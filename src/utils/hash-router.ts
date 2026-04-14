@@ -10,6 +10,7 @@ export class HashRouter implements ReactiveController {
   private host: ReactiveControllerHost;
   private routes: Route[];
   private currentPath = '/';
+  private currentQuery = new URLSearchParams();
 
   constructor(host: ReactiveControllerHost, routes: Route[]) {
     this.host = host;
@@ -29,10 +30,18 @@ export class HashRouter implements ReactiveController {
   private _onHashChange = () => {
     const hash = window.location.hash;
     const raw = hash ? hash.slice(1) || '/' : '/';
-    // Normalize: strip trailing slash (but keep root '/')
-    this.currentPath = raw.length > 1 && raw.endsWith('/') ? raw.slice(0, -1) : raw;
+    const qIdx = raw.indexOf('?');
+    const pathPart = qIdx === -1 ? raw : raw.slice(0, qIdx);
+    const queryPart = qIdx === -1 ? '' : raw.slice(qIdx + 1);
+    this.currentPath = pathPart.length > 1 && pathPart.endsWith('/')
+      ? pathPart.slice(0, -1) : (pathPart || '/');
+    this.currentQuery = new URLSearchParams(queryPart);
     this.host.requestUpdate();
   };
+
+  getQuery(): URLSearchParams {
+    return this.currentQuery;
+  }
 
   outlet(): TemplateResult {
     for (const route of this.routes) {
