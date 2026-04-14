@@ -8,14 +8,15 @@ const SLUG_PATTERN = /^[a-zA-Z0-9_-]+$/;
 
 /**
  * Escape HTML special characters to prevent XSS in generated OG HTML pages.
- * Escapes: & < > "
+ * Escapes: & < > " ' (all five OWASP-recommended characters).
  */
 function escapeHtml(str) {
   return str
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 /**
