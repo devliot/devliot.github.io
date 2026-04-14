@@ -17,6 +17,8 @@ export class DevliotArticlePage extends LitElement {
 
   @state() private _html = '';
   @state() private _error = '';
+  @state() private _tags: string[] = [];
+  @state() private _category = '';
 
   connectedCallback() {
     super.connectedCallback();
@@ -73,6 +75,25 @@ export class DevliotArticlePage extends LitElement {
     } catch {
       this._error = 'Could not load article. Check your connection and try again.';
     }
+
+    // Fetch article metadata for tags (non-critical — failure is silent)
+    try {
+      const regRes = await fetch(`${import.meta.env.BASE_URL}articles/index.json`);
+      if (regRes.ok) {
+        const registry = await regRes.json();
+        const meta = registry.articles.find((a: { slug: string }) => a.slug === this.slug);
+        if (meta) {
+          this._tags = meta.tags || [];
+          this._category = meta.category || '';
+        }
+      }
+    } catch {
+      // Metadata fetch failure is non-critical — tags just won't show
+    }
+  }
+
+  private _navigateToTag(tag: string): void {
+    window.location.hash = `/?tag=${encodeURIComponent(tag)}`;
   }
 
   private _injectHeadingAnchors(): void {
@@ -130,6 +151,14 @@ export class DevliotArticlePage extends LitElement {
     if (this._error) {
       return html`<article class="error-state"><p>${this._error}</p></article>`;
     }
-    return html`<article>${unsafeHTML(this._html)}</article>`;
+    return html`
+      <article>${unsafeHTML(this._html)}</article>
+      ${this._tags.length > 0 || this._category ? html`
+        <nav class="article-tags" aria-label="Article tags">
+          ${this._category ? html`<button class="tag-link" @click=${() => this._navigateToTag(this._category)}>${this._category}</button>` : ''}
+          ${this._tags.map(tag => html`<button class="tag-link" @click=${() => this._navigateToTag(tag)}>${tag}</button>`)}
+        </nav>
+      ` : ''}
+    `;
   }
 }

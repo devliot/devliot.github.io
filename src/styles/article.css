@@ -144,3 +144,33 @@ blockquote {
   padding: var(--space-3xl) var(--space-lg);
   color: var(--color-text-muted);
 }
+
+/* Article tag navigation — per D-06/NAV-03 */
+.article-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  padding-top: var(--space-xl);
+  padding-bottom: var(--space-lg);
+  border-top: 1px solid #eeeeee;
+  margin-top: var(--space-xl);
+}
+
+.article-tags .tag-link {
+  font-size: var(--font-size-label);
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.article-tags .tag-link:hover {
+  color: var(--color-accent);
+}
+
+.article-tags .tag-link:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
