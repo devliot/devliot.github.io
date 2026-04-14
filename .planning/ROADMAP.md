@@ -78,7 +78,11 @@ Plans:
   2. The article list on the home/index page shows articles in reverse chronological order (newest first)
   3. Clicking a tag on any article shows all articles sharing that tag
   4. Typing in the search box filters visible articles in real time (client-side, no server request)
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 04-01-PLAN.md — Extend HashRouter with hash query params, install FlexSearch, build-time search data generation
+- [ ] 04-02-PLAN.md — Home page article list with filter chips, tag navigation from article pages
+- [ ] 04-03-PLAN.md — Search input in header with FlexSearch integration, E2E tests for all NAV requirements
 **UI hint**: yes
 
 ### Phase 5: Article Metadata
@@ -98,8 +102,8 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/3 | Planned | - |
-| 2. Design System | 0/2 | Planned | - |
-| 3. Article Components | 0/? | Not started | - |
-| 4. Navigation & Discovery | 0/? | Not started | - |
+| 1. Foundation | 3/3 | Complete | - |
+| 2. Design System | 2/2 | Complete | - |
+| 3. Article Components | 4/4 | Complete | - |
+| 4. Navigation & Discovery | 0/3 | Planned | - |
 | 5. Article Metadata | 0/? | Not started | - |
