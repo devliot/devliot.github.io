@@ -95,8 +95,8 @@ Plans:
   3. Every article page displays its publication date in a human-readable format
 **Plans:** 2 plans
 Plans:
-- [ ] 05-01-PLAN.md — Build-time OG HTML generation, reading time computation, index.json schema extension, build pipeline update
-- [ ] 05-02-PLAN.md — Metadata line in article page (date + reading time), Playwright E2E tests for META-01/02/03
+- [x] 05-01-PLAN.md — Build-time OG HTML generation, reading time computation, index.json schema extension, build pipeline update
+- [x] 05-02-PLAN.md — Metadata line in article page (date + reading time), Playwright E2E tests for META-01/02/03
 **UI hint**: yes
 
 ## Progress
