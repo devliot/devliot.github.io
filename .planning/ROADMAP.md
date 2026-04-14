@@ -80,9 +80,9 @@ Plans:
   4. Typing in the search box filters visible articles in real time (client-side, no server request)
 **Plans:** 3 plans
 Plans:
-- [ ] 04-01-PLAN.md — Extend HashRouter with hash query params, install FlexSearch, build-time search data generation
-- [ ] 04-02-PLAN.md — Home page article list with filter chips, tag navigation from article pages
-- [ ] 04-03-PLAN.md — Search input in header with FlexSearch integration, E2E tests for all NAV requirements
+- [x] 04-01-PLAN.md — Extend HashRouter with hash query params, install FlexSearch, build-time search data generation
+- [x] 04-02-PLAN.md — Home page article list with filter chips, tag navigation from article pages
+- [x] 04-03-PLAN.md — Search input in header with FlexSearch integration, E2E tests for all NAV requirements
 **UI hint**: yes
 
 ### Phase 5: Article Metadata
