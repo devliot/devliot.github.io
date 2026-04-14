@@ -5,9 +5,14 @@
       "title": "Article Components Demo",
       "date": "2026-04-11",
       "category": "Tutorial",
-      "tags": ["demo", "components", "reference"],
+      "tags": [
+        "demo",
+        "components",
+        "reference"
+      ],
       "description": "A comprehensive demo showcasing all article content types: code blocks with syntax highlighting, LaTeX math formulas, images, heading anchors, Mermaid diagrams, and Chart.js charts.",
-      "image": "articles/01-demo-article/og-image.png"
+      "image": "articles/01-demo-article/og-image.png",
+      "readingTime": 2
     }
   ]
 }
