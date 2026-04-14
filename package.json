@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "node scripts/build-search-index.mjs && tsc && vite build",
     "preview": "vite preview",
     "test-e2e": "npx playwright test --project=chromium"
   },
@@ -19,6 +19,7 @@
     "@lit-labs/router": "^0.1.4",
     "@observablehq/plot": "^0.6.17",
     "chart.js": "^4.5.1",
+    "flexsearch": "^0.8.212",
     "katex": "^0.16.45",
     "lit": "^3.3.2",
     "mermaid": "^11.14.0",
