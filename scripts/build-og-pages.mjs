@@ -65,7 +65,7 @@ function generateOgPages() {
     const title = escapeHtml(article.title || '');
     const description = article.description ? escapeHtml(article.description) : '';
     const imageUrl = article.image
-      ? `${SITE_URL}${BASE_URL}${article.image}`
+      ? escapeHtml(`${SITE_URL}${BASE_URL}${article.image}`)
       : '';
     const articleUrl = `${SITE_URL}${BASE_URL}#/article/${article.slug}`;
     const redirectUrl = `${BASE_URL}#/article/${article.slug}`;
