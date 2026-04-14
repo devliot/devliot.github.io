@@ -15,6 +15,10 @@ Readers can consume well-formatted technical articles where code, math, diagrams
 - [x] Static site built with Lit.js web components — Validated in Phase 1: Foundation
 - [x] Deployment via GitHub Pages — Validated in Phase 1: Foundation
 - [x] Minimalist, content-focused design — Validated in Phase 2: Design System (monochrome palette, responsive layout, brand typography)
+- [x] Navigation by category (IA, Java, Maths, etc.) — Validated in Phase 4: Navigation & Discovery (filter chips with tag/category unification)
+- [x] Chronological article listing (newest first) — Validated in Phase 4: Navigation & Discovery (reverse-chronological sort)
+- [x] Tag system across articles — Validated in Phase 4: Navigation & Discovery (clickable tags on article pages, filter chips on home)
+- [x] Search functionality within articles — Validated in Phase 4: Navigation & Discovery (FlexSearch full-text search in sticky header)
 
 ### Active
 
@@ -25,10 +29,6 @@ Readers can consume well-formatted technical articles where code, math, diagrams
 - [ ] Image support in articles
 - [ ] Diagram support (Mermaid — flowcharts, architecture diagrams)
 - [ ] Data visualization support (charts, curves, histograms)
-- [ ] Navigation by category (IA, Java, Maths, etc.)
-- [ ] Chronological article listing (newest first)
-- [ ] Tag system across articles
-- [ ] Search functionality within articles
 - [ ] Minimalist, content-focused design
 - [ ] Deployment via GitHub Pages
 
@@ -83,4 +83,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-11 after Phase 2 completion*
+*Last updated: 2026-04-14 after Phase 4 completion*
