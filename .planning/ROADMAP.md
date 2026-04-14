@@ -93,12 +93,16 @@ Plans:
   1. Pasting an article URL into a Twitter/LinkedIn card validator shows the correct title, description, and image
   2. Every article page displays an estimated reading time (e.g. "5 min read")
   3. Every article page displays its publication date in a human-readable format
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 05-01-PLAN.md — Build-time OG HTML generation, reading time computation, index.json schema extension, build pipeline update
+- [ ] 05-02-PLAN.md — Metadata line in article page (date + reading time), Playwright E2E tests for META-01/02/03
+**UI hint**: yes
 
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -106,4 +110,4 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 | 2. Design System | 2/2 | Complete | - |
 | 3. Article Components | 4/4 | Complete | - |
 | 4. Navigation & Discovery | 0/3 | Planned | - |
-| 5. Article Metadata | 0/? | Not started | - |
+| 5. Article Metadata | 0/2 | Planned | - |
