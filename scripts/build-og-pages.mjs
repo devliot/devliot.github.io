@@ -94,7 +94,7 @@ function generateOgPages() {
 ${descMeta}    <meta property="og:url" content="${articleUrl}" />
 ${ogImageMeta}    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${title}" />
-${twitterDescMeta}${twitterImageMeta}  <script>window.location.replace('${redirectUrl}');</script>
+${twitterDescMeta}${twitterImageMeta}  <script>window.location.replace(${JSON.stringify(redirectUrl)});</script>
 </head>
 <body></body>
 </html>
