@@ -68,8 +68,8 @@ function generateOgPages() {
     const imageUrl = article.image
       ? escapeHtml(`${SITE_URL}${BASE_URL}${article.image}`)
       : '';
-    const articleUrl = `${SITE_URL}${BASE_URL}#/article/${article.slug}`;
-    const redirectUrl = `${BASE_URL}#/article/${article.slug}`;
+    const articleUrl = `${SITE_URL}${BASE_URL}article/${article.slug}`;
+    const redirectUrl = `${BASE_URL}article/${article.slug}`;
 
     const descMeta = description
       ? `    <meta property="og:description" content="${description}" />\n`
