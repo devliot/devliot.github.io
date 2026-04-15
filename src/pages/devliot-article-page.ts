@@ -46,8 +46,10 @@ export class DevliotArticlePage extends LitElement {
   }
 
   private async _loadArticle(): Promise<void> {
+    const currentSlug = this.slug;
+
     // T-03-02: Validate slug before constructing URL — reject path traversal attempts
-    if (!SLUG_PATTERN.test(this.slug)) {
+    if (!SLUG_PATTERN.test(currentSlug)) {
       this._error = 'Article not found.';
       this._html = '';
       return;
@@ -55,13 +57,19 @@ export class DevliotArticlePage extends LitElement {
 
     this._error = '';
     this._html = '';
+    this._tags = [];
+    this._category = '';
+    this._date = '';
+    this._readingTime = 0;
 
     try {
-      const url = `${import.meta.env.BASE_URL}articles/${this.slug}/index.html`;
+      const url = `${import.meta.env.BASE_URL}articles/${currentSlug}/index.html`;
       const res = await fetch(url);
+      if (this.slug !== currentSlug) return; // slug changed during fetch
 
       if (res.ok) {
         const text = await res.text();
+        if (this.slug !== currentSlug) return;
         // Guard against Vite SPA fallback: if the response is the app shell
         // (contains <!DOCTYPE or <devliot-app>), treat as 404 to prevent
         // recursive rendering.
@@ -76,15 +84,18 @@ export class DevliotArticlePage extends LitElement {
         this._error = 'Could not load article. Check your connection and try again.';
       }
     } catch {
+      if (this.slug !== currentSlug) return;
       this._error = 'Could not load article. Check your connection and try again.';
     }
 
     // Fetch article metadata for tags (non-critical — failure is silent)
     try {
       const regRes = await fetch(`${import.meta.env.BASE_URL}articles/index.json`);
+      if (this.slug !== currentSlug) return; // slug changed during metadata fetch
       if (regRes.ok) {
         const registry: ArticleRegistry = await regRes.json();
-        const meta = registry.articles.find(a => a.slug === this.slug);
+        if (this.slug !== currentSlug) return;
+        const meta = registry.articles.find(a => a.slug === currentSlug);
         if (meta) {
           this._tags = meta.tags || [];
           this._category = meta.category || '';
