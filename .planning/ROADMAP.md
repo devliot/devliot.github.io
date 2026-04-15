@@ -32,7 +32,7 @@
 > Full per-phase detail lives in `.planning/milestones/v2.0-ROADMAP.md`. The sections below are inlined so `gsd-tools` can resolve each phase without crossing files. Keep both copies in sync when amending.
 
 ### Phase 7: Deep-linkable Anchors
-**Goal**: Readers can share a direct link to any h2 or h3 section, and loading that link scrolls to the heading below the sticky header
+**Goal**: Readers can share a direct link to any h2 or h3 section, and loading that link scrolls to the heading below the sticky header — with clean path-based URLs
 **Depends on**: Phase 6
 **Requirements**: ANCH-01, ANCH-02, ANCH-03, ANCH-04, ANCH-05
 **Success Criteria** (what must be TRUE):
@@ -41,11 +41,12 @@
   3. The scrolled-to heading is fully visible below the sticky header (not obscured by it) on both home and article page header variants
   4. Pressing the browser back button after navigating between two different section anchors returns to the previous `?section=` state without reloading the page
   5. Deep-link anchors are present for h2 and h3 elements, and absent on h4 and below
-**Plans:** 3 plans
+**Plans:** 4 plans
 Plans:
 - [x] 07-01-PLAN.md — Test scaffolding (RED stubs) + ResizeObserver --header-height pipeline + CSS scope/scroll-margin
 - [x] 07-02-PLAN.md — Anchor selector tightening (h2/h3) + pushState click handler (replaces clipboard)
 - [ ] 07-03-PLAN.md — Initial-load scroll enhancement + popstate wiring + visual verification
+- [ ] 07-04-PLAN.md — Path-based routing migration (hash router replaced, SPA fallback, test URL rewrite)
 **UI hint**: yes
 
 ### Phase 8: UI Refresh
@@ -103,7 +104,7 @@ Plans:
 | 4. Navigation & Discovery | v1.0 | 3/3 | Complete | 2026-04-13 |
 | 5. Article Metadata | v1.0 | 2/2 | Complete | 2026-04-14 |
 | 6. Data Schema Extension | v2.0 | 2/2 | Complete    | 2026-04-15 |
-| 7. Deep-linkable Anchors | v2.0 | 0/3 | Not started | - |
+| 7. Deep-linkable Anchors | v2.0 | 0/4 | Not started | - |
 | 8. UI Refresh | v2.0 | 0/? | Not started | - |
 | 9. Per-article Authors | v2.0 | 0/? | Not started | - |
 | 10. Per-article Bibliography | v2.0 | 0/? | Not started | - |
