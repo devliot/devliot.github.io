@@ -12,7 +12,44 @@
       ],
       "description": "A comprehensive demo showcasing all article content types: code blocks with syntax highlighting, LaTeX math formulas, images, heading anchors, Mermaid diagrams, and Chart.js charts.",
       "image": "articles/01-demo-article/og-image.png",
-      "readingTime": 2
+      "readingTime": 2,
+      "authors": [
+        { "name": "Eliott", "url": "https://github.com/devliot" },
+        { "name": "Sample Coauthor" }
+      ],
+      "bibliography": [
+        {
+          "id": "vaswani-2017",
+          "type": "article",
+          "title": "Attention Is All You Need",
+          "authors": [
+            { "name": "Vaswani, Ashish" },
+            { "name": "Shazeer, Noam" },
+            { "name": "Parmar, Niki" },
+            { "name": "Uszkoreit, Jakob" },
+            { "name": "Jones, Llion" },
+            { "name": "Gomez, Aidan N." },
+            { "name": "Kaiser, Lukasz" },
+            { "name": "Polosukhin, Illia" }
+          ],
+          "year": 2017,
+          "url": "https://arxiv.org/abs/1706.03762"
+        },
+        {
+          "id": "bringhurst-2004",
+          "type": "book",
+          "title": "The Elements of Typographic Style",
+          "authors": [{ "name": "Bringhurst, Robert" }],
+          "year": 2004,
+          "publisher": "Hartley & Marks"
+        },
+        {
+          "id": "lit-docs",
+          "type": "web",
+          "title": "Lit - Simple. Fast. Web Components.",
+          "url": "https://lit.dev/"
+        }
+      ]
     }
   ]
 }

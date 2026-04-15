@@ -1,6 +1,6 @@
 <h1>Article Components Demo</h1>
 
-<p>This demo article exercises every content type supported by the DEVLIOT blog platform. It serves as both a rendering proof and an authoring reference.</p>
+<p>This demo article exercises every content type supported by the DEVLIOT blog platform [lit-docs]. It serves as both a rendering proof and an authoring reference.</p>
 
 <h2>Code Highlighting</h2>
 
@@ -20,6 +20,8 @@ function getArticle(slug: string): Article | undefined {
   return articles.find(a => a.slug === slug);
 }
 </devliot-code>
+
+<p>Modern code patterns like the one above are increasingly influenced by advances in machine learning and natural language processing [vaswani-2017].</p>
 
 <p>Python code works too:</p>
 
@@ -52,6 +54,8 @@ print(fibonacci(10))
   <img src="articles/01-demo-article/diagram-placeholder.svg" alt="A simple neural network architecture diagram" />
   <figcaption>A placeholder image demonstrating figure and caption rendering</figcaption>
 </figure>
+
+<p>Clear visual hierarchy and typographic precision are essential for technical content [bringhurst-2004].</p>
 
 <h2>Diagrams</h2>
 
