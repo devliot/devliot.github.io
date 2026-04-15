@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Deep links, épuration UI, attribution & discovery
 status: executing
-stopped_at: Phase 8 context gathered
-last_updated: "2026-04-15T18:26:01.819Z"
-last_activity: 2026-04-15
+stopped_at: Phase 8 UI-SPEC approved
+last_updated: "2026-04-15T18:59:36.151Z"
+last_activity: 2026-04-15 -- Phase 8 planning complete
 progress:
   total_phases: 5
   completed_phases: 1
-  total_plans: 4
+  total_plans: 6
   completed_plans: 4
-  percent: 100
+  percent: 67
 ---
 
 # Project State
@@ -27,8 +27,8 @@ See: .planning/PROJECT.md (updated 2026-04-15)
 
 Phase: 8
 Plan: Not started
-Status: Executing Phase 07
-Last activity: 2026-04-15
+Status: Ready to execute
+Last activity: 2026-04-15 -- Phase 8 planning complete
 
 Progress: [----------] 0% (0/6 phases complete)
 
@@ -58,6 +58,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-15T18:26:01.816Z
-Stopped at: Phase 8 context gathered
+Last session: 2026-04-15T18:36:16.441Z
+Stopped at: Phase 8 UI-SPEC approved
 Resume: run `/gsd-plan-phase 6`
