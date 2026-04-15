@@ -16,6 +16,27 @@ export class DevliotApp extends LitElement {
     { pattern: '/article/:slug', render: (params) => html`<devliot-article-page .slug=${params['slug']}></devliot-article-page>` },
   ]);
 
+  private _headerObserver?: ResizeObserver;
+
+  firstUpdated() {
+    const header = this.renderRoot.querySelector('devliot-header');
+    if (header) {
+      this._headerObserver = new ResizeObserver(([entry]) => {
+        const height = entry.borderBoxSize?.[0]?.blockSize
+          ?? (entry.target as HTMLElement).offsetHeight;
+        document.documentElement.style.setProperty(
+          '--header-height', `${height}px`
+        );
+      });
+      this._headerObserver.observe(header);
+    }
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this._headerObserver?.disconnect();
+  }
+
   render() {
     return html`
       <devliot-header></devliot-header>
