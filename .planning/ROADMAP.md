@@ -58,7 +58,10 @@ Plans:
   2. The footer background is white on all pages with legible monochrome typography
   3. On the home page, the header contains the search bar and no logo or menu icon
   4. On any article page, the header contains the DEVLIOT logo and no search bar or menu icon
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 08-01-PLAN.md — Playwright test stubs (RED) + --color-border token + footer white background
+- [ ] 08-02-PLAN.md — Header variant refactor (scroll shadow, home/article variants, French labels) + app wiring + test repairs
 **UI hint**: yes
 
 ### Phase 9: Per-article Authors
@@ -105,7 +108,7 @@ Plans:
 | 5. Article Metadata | v1.0 | 2/2 | Complete | 2026-04-14 |
 | 6. Data Schema Extension | v2.0 | 2/2 | Complete    | 2026-04-15 |
 | 7. Deep-linkable Anchors | v2.0 | 0/4 | Not started | - |
-| 8. UI Refresh | v2.0 | 0/? | Not started | - |
+| 8. UI Refresh | v2.0 | 0/2 | Not started | - |
 | 9. Per-article Authors | v2.0 | 0/? | Not started | - |
 | 10. Per-article Bibliography | v2.0 | 0/? | Not started | - |
 | 11. Sitemap XML | v2.0 | 0/? | Not started | - |
