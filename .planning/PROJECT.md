@@ -54,6 +54,9 @@ v2.0 requirements (detailed in REQUIREMENTS.md, mapped to phases in ROADMAP.md):
 - Per-article author(s) metadata + display
 - Build-time sitemap XML generation
 
+**Progress:**
+- Phase 6: Data Schema Extension — complete (2026-04-15). Centralised Article/Author/BibliographyEntry/ArticleRegistry types in `src/types/article.ts`; demo article populated with authors + typed bibliography; consumer files wired with explicit type imports. Rendering deferred to Phases 9 (author byline) and 10 (bibliography).
+
 ### Out of Scope
 
 - CMS / admin panel — the repo is the CMS; git commit = publish
@@ -114,4 +117,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-15 — v2.0 milestone started*
+*Last updated: 2026-04-15 — Phase 6 complete (data schema extension)*
