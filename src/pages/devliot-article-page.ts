@@ -138,9 +138,10 @@ export class DevliotArticlePage extends LitElement {
       anchor.addEventListener('click', (e: MouseEvent) => {
         e.preventDefault();
         const baseUrl = `${window.location.origin}${window.location.pathname}${window.location.hash.split('?')[0]}`;
-        navigator.clipboard.writeText(`${baseUrl}?section=${id}`).catch(() => {
-          // Clipboard write failed — silent fail (T-03-03: no sensitive data involved)
-        });
+        const link = `${baseUrl}?section=${id}`;
+        if (navigator.clipboard?.writeText) {
+          navigator.clipboard.writeText(link).catch(() => {});
+        }
         heading.scrollIntoView({ behavior: 'smooth' });
       });
 
