@@ -13,6 +13,7 @@
   --color-accent: #333333;
   --color-text: #1a1a1a;
   --color-text-muted: #666666;
+  --color-border: #e5e5e5;
 
   /* Spacing scale — multiples of 4 (unchanged from Phase 1) */
   --space-xs: 4px;

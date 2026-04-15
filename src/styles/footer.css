@@ -2,7 +2,7 @@
 :host {
   display: block;
   padding: var(--space-md);
-  background-color: var(--color-surface-alt);
+  background-color: var(--color-surface);
   text-align: center;
   font-size: var(--font-size-label);
   color: var(--color-text-muted);
