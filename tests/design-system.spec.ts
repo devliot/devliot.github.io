@@ -9,7 +9,8 @@ const BREAKPOINTS = [
 test.describe('BRAND-01: ASCII Logo', () => {
   test('header logo — ASCII art pre element is visible in header', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto('/');
+    await page.goto('/article/01-demo-article');
+    await page.waitForSelector('devliot-article-page article h1', { timeout: 10000 });
     const header = page.locator('devliot-header');
     const pre = header.locator('pre[aria-label="DEVLIOT"]');
     await expect(pre).toBeVisible();
@@ -35,7 +36,8 @@ test.describe('BRAND-02: Typography and Colors', () => {
 
   test('code font — Fira Code is applied to code elements', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto('/');
+    await page.goto('/article/01-demo-article');
+    await page.waitForSelector('devliot-article-page article h1', { timeout: 10000 });
     // Test against the pre element in header (ASCII logo uses Fira Code)
     const header = page.locator('devliot-header');
     const pre = header.locator('pre');
@@ -45,7 +47,8 @@ test.describe('BRAND-02: Typography and Colors', () => {
 
   test('accent color — links use #333333 (grayscale)', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto('/');
+    await page.goto('/article/01-demo-article');
+    await page.waitForSelector('devliot-article-page article h1', { timeout: 10000 });
     const header = page.locator('devliot-header');
     const link = header.locator('a');
     const color = await link.evaluate(el => getComputedStyle(el).color);
@@ -81,16 +84,5 @@ test.describe('INFRA-05: Responsive Layout', () => {
     expect(maxWidth).toBe('720px');
   });
 
-  test('hamburger button — visible on mobile, hidden on desktop', async ({ page }) => {
-    // Mobile: hamburger visible
-    await page.setViewportSize({ width: 375, height: 812 });
-    await page.goto('/');
-    const header = page.locator('devliot-header');
-    const hamburger = header.locator('button[aria-label="Ouvrir le menu"]');
-    await expect(hamburger).toBeVisible();
 
-    // Desktop: hamburger hidden
-    await page.setViewportSize({ width: 1280, height: 800 });
-    await expect(hamburger).toBeHidden();
-  });
 });

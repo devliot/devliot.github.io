@@ -1,5 +1,6 @@
-import { LitElement, html, unsafeCSS, PropertyValues } from 'lit';
+import { LitElement, html, unsafeCSS } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import type { PropertyValues } from '@lit/reactive-element';
 import headerStyles from '../styles/header.css?inline';
 
 @customElement('devliot-header')

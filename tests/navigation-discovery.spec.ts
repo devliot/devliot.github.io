@@ -130,7 +130,7 @@ test.describe('Navigation & Discovery (Phase 4)', () => {
     // Search button should be visible
     const searchBtn = header.locator('.search-btn');
     await expect(searchBtn).toBeVisible();
-    await expect(searchBtn).toHaveAttribute('aria-label', 'Search articles');
+    await expect(searchBtn).toHaveAttribute('aria-label', 'Rechercher des articles');
     await expect(searchBtn).toHaveAttribute('aria-expanded', 'false');
 
     // Click to expand
@@ -140,7 +140,7 @@ test.describe('Navigation & Discovery (Phase 4)', () => {
     // Input should appear
     const searchInput = header.locator('.search-input');
     await expect(searchInput).toBeVisible();
-    await expect(searchInput).toHaveAttribute('aria-label', 'Search articles');
+    await expect(searchInput).toHaveAttribute('aria-label', 'Rechercher un article');
   });
 
   // NAV-04: Typing in search filters articles

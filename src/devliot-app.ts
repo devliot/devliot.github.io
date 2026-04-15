@@ -38,8 +38,9 @@ export class DevliotApp extends LitElement {
   }
 
   render() {
+    const variant = window.location.pathname === '/' ? 'home' : 'article';
     return html`
-      <devliot-header></devliot-header>
+      <devliot-header variant="${variant}"></devliot-header>
       <main>${this.router.outlet()}</main>
       <devliot-footer></devliot-footer>
     `;
