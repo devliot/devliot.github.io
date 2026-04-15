@@ -41,7 +41,11 @@
   3. The scrolled-to heading is fully visible below the sticky header (not obscured by it) on both home and article page header variants
   4. Pressing the browser back button after navigating between two different section anchors returns to the previous `?section=` state without reloading the page
   5. Deep-link anchors are present for h2 and h3 elements, and absent on h4 and below
-**Plans**: TBD
+**Plans:** 3 plans
+Plans:
+- [ ] 07-01-PLAN.md — Test scaffolding (RED stubs) + ResizeObserver --header-height pipeline + CSS scope/scroll-margin
+- [ ] 07-02-PLAN.md — Anchor selector tightening (h2/h3) + pushState click handler (replaces clipboard)
+- [ ] 07-03-PLAN.md — Initial-load scroll enhancement + popstate wiring + visual verification
 **UI hint**: yes
 
 ### Phase 8: UI Refresh
@@ -99,7 +103,7 @@
 | 4. Navigation & Discovery | v1.0 | 3/3 | Complete | 2026-04-13 |
 | 5. Article Metadata | v1.0 | 2/2 | Complete | 2026-04-14 |
 | 6. Data Schema Extension | v2.0 | 2/2 | Complete    | 2026-04-15 |
-| 7. Deep-linkable Anchors | v2.0 | 0/? | Not started | - |
+| 7. Deep-linkable Anchors | v2.0 | 0/3 | Not started | - |
 | 8. UI Refresh | v2.0 | 0/? | Not started | - |
 | 9. Per-article Authors | v2.0 | 0/? | Not started | - |
 | 10. Per-article Bibliography | v2.0 | 0/? | Not started | - |
