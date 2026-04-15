@@ -1,7 +1,8 @@
 # Phase 7: Deep-linkable Anchors - Context
 
 **Gathered:** 2026-04-15
-**Status:** Ready for planning
+**Updated:** 2026-04-15 (scope expanded — see §"Scope expansion: path routing")
+**Status:** Scope expanded, ready for gap planning
 
 <domain>
 ## Phase Boundary
@@ -45,7 +46,35 @@ Success criteria (from ROADMAP.md / REQUIREMENTS.md ANCH-01 → ANCH-05):
 - **D-09:** The offset mechanism is a `ResizeObserver`-driven CSS custom property exposing the live sticky-header height. The article page (and any future scroll consumer) uses it via `scroll-margin-top` on the heading elements, so browser-native scroll positioning handles the offset without JS math at scroll time. This pipeline is the one the roadmap flags as "established in Phase 7, consumed by Phase 8". ResizeObserver covers both viewport resize and Phase 8's header-content changes (home search bar vs article logo).
 - **D-10:** The gap between the bottom of the sticky header and the top of the landed heading is **one line of breathing room** (~0.75rem), not flush. Applied via `scroll-margin-top: calc(var(--header-height) + 0.75rem)` on h2/h3.
 
-### Claude's Discretion
+### Scope expansion: path routing (added 2026-04-15)
+
+**Trigger:** During Plan 07-03 visual verification, user saw the URL `http://localhost:5175/?section=code-highlighting#/article/01-demo-article` and blocked the checkpoint. The `?section=` query string appears BEFORE the hash because the app uses hash-based SPA routing (`src/utils/hash-router.ts`) and browsers enforce query-before-fragment ordering. User wants `/article/{slug}?section={id}` — which requires migrating from hash routing to path routing.
+
+**Decision to expand this phase's scope (not create a separate phase):** user's explicit choice — "add path-routing as a gap in this phase". Phase 7 goal updates from "deep-linkable anchors (ANCH-01..05)" to "deep-linkable anchors WITH clean path-based URLs".
+
+- **D-11 (URL shape — locked by user):** Article routes use path-based URLs: `/article/{slug}`. Section deep links use `/article/{slug}?section={id}`. Home is `/`. No `#` fragment anywhere in public URLs.
+
+- **D-12 (HashRouter removal):** `src/utils/hash-router.ts` is replaced wholesale by a path router. The two internal hash-links (`src/pages/devliot-home-page.ts:199` and `src/components/devliot-header.ts:48`) are rewritten to use path URLs.
+
+- **D-13 (backward compat — clean cut):** Old hash URLs like `/#/article/{slug}` are NOT redirected. After migration they land on the homepage (or 404) — the site has not yet reached a usage level where legacy shared links matter. This keeps the migration free of compatibility shims and legacy code.
+
+- **D-14 (routing UX scope):** Only the URL format changes. No new 404 page, no not-found redesign, no root-path behavior changes, no router feature additions. All existing behaviors (article rendering, home page, search, deep anchors) stay identical — only the URL shape differs.
+
+- **D-15 (anchor work already done, kept as-is):** Plans 07-01, 07-02, and 07-03 (Tasks 1 + 2) are already committed and produce correct deep-link BEHAVIOR. The `history.pushState`/`replaceState`/`popstate` code in `devliot-article-page.ts` is router-agnostic — it mutates the `search` portion of the URL via `url.searchParams.set('section', id)` which works identically under path routing and hash routing. **No revert of the 8 feat commits is required.** The router migration is additive.
+
+- **D-16 (test migration):** The 6 Playwright tests in `tests/deep-linkable-anchors.spec.ts` currently assert URLs of the form `/?section=X#/article/Y`. After migration they must assert `/article/Y?section=X`. The test bodies (navigate, click, scroll, back) don't change — only URL assertions.
+
+- **D-17 (Plan 07-03 visual verification deferred):** The human-verify checkpoint for 07-03 is paused, NOT failed. It resumes after the router migration lands — at that point the user re-runs the 7-step checklist on the new URLs, the automated tests re-assert the new format, and 07-03-SUMMARY.md is written.
+
+### Claude's Discretion (router migration)
+
+- Router implementation choice: `@lit-labs/router` (URLPattern-based, already listed in CLAUDE.md stack recommendations) vs. a hand-written path router that mirrors the existing `HashRouter` shape. Planner decides based on readability, bundle impact, and the level of disruption to `devliot-app.ts:14`.
+- GitHub Pages SPA fallback strategy: copy `index.html` → `404.html` at build time (standard Vite + GH Pages pattern), OR rely on GH Pages custom 404 with a redirect script. Planner/researcher picks.
+- Vite `base` config adjustment: currently `/`. May stay at `/` if the site lives at a custom domain / org Pages URL, or switch to `/devliot/` if served from `devliot.github.io/devliot/`. Planner reads the repo's Pages config and decides.
+- Scroll restoration behavior: whether to set `history.scrollRestoration = 'manual'` during migration (browser default may conflict with the popstate-triggered smooth scroll from 07-03 Task 2). Planner's call — must not regress ANCH-04.
+- Internal link rewrite granularity: two hits are known (`devliot-home-page.ts:199`, `devliot-header.ts:48`) — planner confirms via full-tree grep for `#/` before touching.
+
+### Claude's Discretion (original anchor work, unchanged)
 
 - Exact module placement of the ResizeObserver / `--header-height` CSS variable publisher: inline in `devliot-header.ts`, a new helper in `src/utils/`, or a controller on `devliot-app.ts`. Planner picks based on who else needs to observe it.
 - Exact implementation form of the anchor-injection tightening (regex change, selector update, full refactor of `_injectHeadingAnchors`). Planner's call.
@@ -139,6 +168,8 @@ Success criteria (from ROADMAP.md / REQUIREMENTS.md ANCH-01 → ANCH-05):
 - **Heading id collision detection** (two headings with identical text produce identical ids) — not reported as a real-world issue in v1.0 demo article. Punt unless/until it breaks a real article.
 - **Focus management on scroll** (moving keyboard focus to the landed heading for screen-reader users) — valid accessibility concern not called out in ANCH-01 → ANCH-05. Worth revisiting in a future a11y pass; not blocking v2.0.
 - **URL sharing hint / UI affordance** (e.g., a visible "share section" label) — dropped in favor of the hover-reveal `#` pattern from Phase 3. Revisit only if analytics/feedback show the feature is undiscovered.
+- **Hash URL backward-compat redirect** — explicitly dropped (D-13). Not worth carrying legacy code; the site has not yet reached the usage threshold where shared hash links matter. If link loss becomes a real complaint, reintroduce as a single-purpose micro-phase (read `location.hash`, `replaceState` to path URL).
+- **Routing UX improvements beyond URL format** — dropped (D-14). Custom 404 page, not-found redesign, route-change analytics, breadcrumbs, etc. are all out of scope for this expansion. File any ideas against a future routing/UX phase.
 
 </deferred>
 
@@ -146,3 +177,4 @@ Success criteria (from ROADMAP.md / REQUIREMENTS.md ANCH-01 → ANCH-05):
 
 *Phase: 07-deep-linkable-anchors*
 *Context gathered: 2026-04-15*
+*Scope expansion (path routing): 2026-04-15 — see §"Scope expansion: path routing" in decisions*
