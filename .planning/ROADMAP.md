@@ -36,7 +36,7 @@
 | 3. Article Components | v1.0 | 4/4 | Complete | 2026-04-12 |
 | 4. Navigation & Discovery | v1.0 | 3/3 | Complete | 2026-04-13 |
 | 5. Article Metadata | v1.0 | 2/2 | Complete | 2026-04-14 |
-| 6. Data Schema Extension | v2.0 | 0/? | Not started | - |
+| 6. Data Schema Extension | v2.0 | 0/2 | Planned | - |
 | 7. Deep-linkable Anchors | v2.0 | 0/? | Not started | - |
 | 8. UI Refresh | v2.0 | 0/? | Not started | - |
 | 9. Per-article Authors | v2.0 | 0/? | Not started | - |
