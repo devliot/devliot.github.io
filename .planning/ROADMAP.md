@@ -43,7 +43,7 @@
   5. Deep-link anchors are present for h2 and h3 elements, and absent on h4 and below
 **Plans:** 3 plans
 Plans:
-- [ ] 07-01-PLAN.md — Test scaffolding (RED stubs) + ResizeObserver --header-height pipeline + CSS scope/scroll-margin
+- [x] 07-01-PLAN.md — Test scaffolding (RED stubs) + ResizeObserver --header-height pipeline + CSS scope/scroll-margin
 - [ ] 07-02-PLAN.md — Anchor selector tightening (h2/h3) + pushState click handler (replaces clipboard)
 - [ ] 07-03-PLAN.md — Initial-load scroll enhancement + popstate wiring + visual verification
 **UI hint**: yes
