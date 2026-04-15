@@ -6,11 +6,10 @@ interface Route {
   render: (params: Record<string, string>) => TemplateResult;
 }
 
-export class HashRouter implements ReactiveController {
+export class PathRouter implements ReactiveController {
   private host: ReactiveControllerHost;
   private routes: Route[];
   private currentPath = '/';
-  private currentQuery = new URLSearchParams();
 
   constructor(host: ReactiveControllerHost, routes: Route[]) {
     this.host = host;
@@ -19,28 +18,27 @@ export class HashRouter implements ReactiveController {
   }
 
   hostConnected() {
-    window.addEventListener('hashchange', this._onHashChange);
-    this._onHashChange();
+    window.addEventListener('popstate', this._onPopState);
+    this._resolve();
   }
 
   hostDisconnected() {
-    window.removeEventListener('hashchange', this._onHashChange);
+    window.removeEventListener('popstate', this._onPopState);
   }
 
-  private _onHashChange = () => {
-    const hash = window.location.hash;
-    const raw = hash ? hash.slice(1) || '/' : '/';
-    const qIdx = raw.indexOf('?');
-    const pathPart = qIdx === -1 ? raw : raw.slice(0, qIdx);
-    const queryPart = qIdx === -1 ? '' : raw.slice(qIdx + 1);
-    this.currentPath = pathPart.length > 1 && pathPart.endsWith('/')
-      ? pathPart.slice(0, -1) : (pathPart || '/');
-    this.currentQuery = new URLSearchParams(queryPart);
-    this.host.requestUpdate();
+  private _onPopState = () => {
+    const newPath = window.location.pathname;
+    // Only trigger re-render if the pathname actually changed.
+    // Query-only changes (?section=) must NOT cause a route re-evaluation --
+    // that would remount the article page and break ANCH-04.
+    if (newPath !== this.currentPath) {
+      this._resolve();
+    }
   };
 
-  getQuery(): URLSearchParams {
-    return this.currentQuery;
+  private _resolve() {
+    this.currentPath = window.location.pathname;
+    this.host.requestUpdate();
   }
 
   outlet(): TemplateResult {
@@ -52,7 +50,8 @@ export class HashRouter implements ReactiveController {
   }
 
   navigate(path: string) {
-    window.location.hash = path;
+    window.history.pushState({}, '', path);
+    this._resolve();
   }
 
   private _match(pattern: string, path: string): Record<string, string> | null {
@@ -63,7 +62,7 @@ export class HashRouter implements ReactiveController {
     for (let i = 0; i < patternParts.length; i++) {
       if (patternParts[i].startsWith(':')) {
         const value = pathParts[i];
-        if (!value) return null; // reject empty segments
+        if (!value) return null;
         params[patternParts[i].slice(1)] = decodeURIComponent(value);
       } else if (patternParts[i] !== pathParts[i]) {
         return null;
