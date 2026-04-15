@@ -4,7 +4,7 @@ milestone: v2.0
 milestone_name: — Deep links, épuration UI, attribution & discovery
 status: executing
 stopped_at: Phase 6 context gathered
-last_updated: "2026-04-15T10:54:50.614Z"
+last_updated: "2026-04-15T12:23:39.443Z"
 last_activity: 2026-04-15
 progress:
   total_phases: 1
@@ -25,7 +25,7 @@ See: .planning/PROJECT.md (updated 2026-04-15)
 
 ## Current Position
 
-Phase: 06
+Phase: 6
 Plan: Not started
 Status: Executing Phase 06
 Last activity: 2026-04-15
