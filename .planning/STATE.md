@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: — Deep links, épuration UI, attribution & discovery
 status: executing
-stopped_at: Phase 7 UI-SPEC approved
-last_updated: "2026-04-15T16:59:08.140Z"
+stopped_at: Phase 8 context gathered
+last_updated: "2026-04-15T18:26:01.819Z"
 last_activity: 2026-04-15
 progress:
   total_phases: 5
@@ -58,6 +58,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-15T12:56:38.707Z
-Stopped at: Phase 7 UI-SPEC approved
+Last session: 2026-04-15T18:26:01.816Z
+Stopped at: Phase 8 context gathered
 Resume: run `/gsd-plan-phase 6`
