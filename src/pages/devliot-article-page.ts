@@ -137,11 +137,9 @@ export class DevliotArticlePage extends LitElement {
 
       anchor.addEventListener('click', (e: MouseEvent) => {
         e.preventDefault();
-        const baseUrl = `${window.location.origin}${window.location.pathname}${window.location.hash.split('?')[0]}`;
-        const link = `${baseUrl}?section=${id}`;
-        if (navigator.clipboard?.writeText) {
-          navigator.clipboard.writeText(link).catch(() => {});
-        }
+        const url = new URL(window.location.href);
+        url.searchParams.set('section', id);
+        history.pushState({ section: id }, '', url.toString());
         heading.scrollIntoView({ behavior: 'smooth' });
       });
 
