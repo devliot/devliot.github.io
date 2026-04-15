@@ -1,13 +1,13 @@
 ---
 gsd_state_version: 1.0
 milestone: v2.0
-milestone_name: Deep links, épuration UI, attribution & discovery
-status: ready
-stopped_at: Roadmap created — Phase 6 ready to plan
-last_updated: "2026-04-15T00:00:00.000Z"
-last_activity: 2026-04-15 -- v2.0 roadmap created, 6 phases, 17 requirements mapped
+milestone_name: — Deep links, épuration UI, attribution & discovery
+status: Not started
+stopped_at: Phase 6 context gathered
+last_updated: "2026-04-15T10:00:21.689Z"
+last_activity: 2026-04-15 — v2.0 roadmap created
 progress:
-  total_phases: 6
+  total_phases: 1
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -39,6 +39,7 @@ Progress: [----------] 0% (0/6 phases complete)
 See PROJECT.md Key Decisions table — all v1.0 decisions marked with outcomes.
 
 v2.0 context:
+
 - Deployment stabilized as user site at root (`devliot.github.io`, Vite `base: '/'`)
 - Commit history cleaned: single author `devliot <devliot@proton.me>`, zero Claude/AI mentions
 - v2.0 uses zero new runtime dependencies — all features use existing Lit primitives + Web APIs
@@ -57,6 +58,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-04-15
-Stopped at: v2.0 roadmap created — ready to plan Phase 6
+Last session: 2026-04-15T10:00:21.687Z
+Stopped at: Phase 6 context gathered
 Resume: run `/gsd-plan-phase 6`
