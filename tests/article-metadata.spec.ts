@@ -85,7 +85,7 @@ test.describe('Article Metadata — META-01 (OG pages, production build)', () =>
     const html = fs.readFileSync(ogPath, 'utf8');
     expect(html).toContain('og:image');
     // Image URL must be absolute
-    expect(html).toContain('https://devliot.github.io/devliot/articles/01-demo-article/og-image.png');
+    expect(html).toContain('https://devliot.github.io/articles/01-demo-article/og-image.png');
   });
 
   test('META-01: OG page uses twitter:card summary_large_image', async () => {
@@ -102,6 +102,6 @@ test.describe('Article Metadata — META-01 (OG pages, production build)', () =>
     const path = await import('path');
     const ogPath = path.join(process.cwd(), 'dist', 'articles', '01-demo-article', 'og.html');
     const html = fs.readFileSync(ogPath, 'utf8');
-    expect(html).toContain("window.location.replace('/devliot/#/article/01-demo-article')");
+    expect(html).toContain("window.location.replace('/#/article/01-demo-article')");
   });
 });

@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import { join, dirname } from 'path';
 
 const SITE_URL = 'https://devliot.github.io';
-const BASE_URL = '/devliot/';
+const BASE_URL = '/';
 const WPM = 238;
 const SLUG_PATTERN = /^[a-zA-Z0-9_-]+$/;
 
