@@ -60,7 +60,7 @@ Plans:
   4. On any article page, the header contains the DEVLIOT logo and no search bar or menu icon
 **Plans:** 2 plans
 Plans:
-- [ ] 08-01-PLAN.md — Playwright test stubs (RED) + --color-border token + footer white background
+- [x] 08-01-PLAN.md — Playwright test stubs (RED) + --color-border token + footer white background
 - [ ] 08-02-PLAN.md — Header variant refactor (scroll shadow, home/article variants, French labels) + app wiring + test repairs
 **UI hint**: yes
 
