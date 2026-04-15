@@ -5,6 +5,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import articleStyles from '../styles/article.css?inline';
 import codeStyles from '../styles/code.css?inline';
 import diagramStyles from '../styles/devliot-diagram.css?inline';
+import type { ArticleRegistry } from '../types/article.js';
 
 /** Allowlist: only alphanumeric characters, hyphens, and underscores (T-03-02: path traversal prevention). */
 const SLUG_PATTERN = /^[a-zA-Z0-9_-]+$/;
@@ -82,8 +83,8 @@ export class DevliotArticlePage extends LitElement {
     try {
       const regRes = await fetch(`${import.meta.env.BASE_URL}articles/index.json`);
       if (regRes.ok) {
-        const registry = await regRes.json();
-        const meta = registry.articles.find((a: { slug: string }) => a.slug === this.slug);
+        const registry: ArticleRegistry = await regRes.json();
+        const meta = registry.articles.find(a => a.slug === this.slug);
         if (meta) {
           this._tags = meta.tags || [];
           this._category = meta.category || '';
