@@ -4,8 +4,8 @@ milestone: v2.0
 milestone_name: — Deep links, épuration UI, attribution & discovery
 status: executing
 stopped_at: Phase 6 context gathered
-last_updated: "2026-04-15T10:19:44.459Z"
-last_activity: 2026-04-15 -- Phase 6 planning complete
+last_updated: "2026-04-15T10:38:03.226Z"
+last_activity: 2026-04-15 -- Phase 06 execution started
 progress:
   total_phases: 1
   completed_phases: 0
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-15)
 
 **Core value:** Readers can consume well-formatted technical articles where code, math, diagrams, and charts render beautifully and are easy to follow.
-**Current focus:** Phase 6 — Data Schema Extension (v2.0 start)
+**Current focus:** Phase 06 — data-schema-extension
 
 ## Current Position
 
-Phase: 6 — Data Schema Extension
-Plan: —
-Status: Ready to execute
-Last activity: 2026-04-15 -- Phase 6 planning complete
+Phase: 06 (data-schema-extension) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 06
+Last activity: 2026-04-15 -- Phase 06 execution started
 
 Progress: [----------] 0% (0/6 phases complete)
 
