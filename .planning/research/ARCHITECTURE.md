@@ -1,317 +1,508 @@
-# Architecture Patterns
+# Architecture Patterns — v2.0 Integration
 
-**Domain:** Lit.js static technical blog (code, math, diagrams, charts)
-**Researched:** 2026-04-08
-
----
-
-## Recommended Architecture
-
-A client-side SPA built from Lit web components, served as a single `index.html` from GitHub Pages. There is no server, no backend, no build-time content pipeline — articles are Lit components written in TypeScript. The build tool (Vite) bundles everything into a `dist/` folder that GitHub Pages serves directly.
-
-```
-Browser
-  └── index.html  (entry point, served by GitHub Pages)
-       └── <blog-app>  (SPA shell, owns routing)
-            ├── <blog-nav>  (navigation + search input)
-            ├── <article-list>  (home / category / tag views)
-            │    └── <article-card> (repeated per post)
-            └── <article-view>  (single article view)
-                 ├── <code-block>  (wraps Prism.js)
-                 ├── <math-formula>  (wraps KaTeX)
-                 ├── <diagram-block>  (wraps Mermaid)
-                 └── <chart-block>  (wraps Chart.js)
-```
+**Domain:** Lit.js static technical blog (v2.0 feature integration)
+**Researched:** 2026-04-14
+**Scope:** Integration of 5 new features into the existing v1.0 architecture. Does NOT re-describe v1.0 foundations.
 
 ---
 
-## Component Boundaries
+## Existing Architecture Reference (v1.0 — do not re-research)
 
-### Shell Layer
+```
+src/
+  main.ts                         → imports all components, mounts <devliot-app>
+  devliot-app.ts                  → HashRouter + layout shell (header/main/footer)
+  utils/hash-router.ts            → custom hash router (hashchange listener)
+  components/
+    devliot-header.ts             → sticky header: logo + search toggle + hamburger
+    devliot-footer.ts             → simple copyright footer
+    devliot-code.ts               → Shiki syntax highlighting
+    devliot-math.ts               → KaTeX math rendering
+    devliot-diagram.ts            → Mermaid diagram rendering
+    devliot-chart.ts              → Chart.js chart rendering
+  pages/
+    devliot-home-page.ts          → article list + tag filter chips + search
+    devliot-article-page.ts       → fetches article HTML, renders metadata, injects heading anchors
+  styles/
+    app.css, header.css, footer.css, article.css, home.css, ...
 
-| Component | Responsibility | Communicates With |
-|-----------|---------------|-------------------|
-| `<blog-app>` | SPA entry, owns router, top-level layout | Router, all views |
-| `<blog-nav>` | Site navigation, category links, search trigger | `<blog-app>` (events), router |
+public/
+  articles/
+    index.json                    → metadata registry (slug, title, date, category, tags, description, image, readingTime)
+    {slug}/index.html             → raw article HTML content
+    {slug}/meta.json              → per-article metadata (slug, title, date, category, tags)
+  search-data.json                → built by build-search-index.mjs
 
-### View Layer
+scripts/
+  build-og-pages.mjs              → --enrich: computes readingTime; --generate: writes dist/articles/{slug}/og.html
+  build-search-index.mjs          → builds search-data.json from article HTML + index.json
 
-| Component | Responsibility | Communicates With |
-|-----------|---------------|-------------------|
-| `<article-list>` | Renders filtered list of article cards | Article registry, `<article-card>` |
-| `<article-view>` | Renders a single article by ID | Article registry, content components |
-| `<article-card>` | Summary tile (title, date, tags, excerpt) | None — display only |
+URL scheme: /#/ (home)  |  /#/article/{slug}  |  /#/?tag=foo  |  /#/?q=foo
+Section links: window.location.search ?section={id} (not hash-based)
+```
 
-### Content Components (Leaf Nodes)
-
-| Component | Responsibility | Communicates With | Third-Party Lib |
-|-----------|---------------|-------------------|-----------------|
-| `<code-block>` | Syntax-highlighted code | None | Prism.js |
-| `<math-formula>` | Inline and block math | None | KaTeX |
-| `<diagram-block>` | Flowcharts, sequence diagrams | None | Mermaid.js |
-| `<chart-block>` | Bar charts, line charts, histograms | None | Chart.js |
-
-### Data Layer (not a component — a module)
-
-| Module | Responsibility | Consumed By |
-|--------|---------------|-------------|
-| `article-registry.ts` | Imports all article components, exposes metadata array | `<article-list>`, `<article-view>`, search, router |
-| `article-meta.ts` | TypeScript type for article metadata (id, title, date, tags, category) | Registry, cards, router |
+**Critical detail:** The router lives in `window.location.hash` (e.g. `#/article/01-demo-article`). The `?section=` parameter lives in `window.location.search` (i.e., the query string before the `#`). The HashRouter reads `window.location.hash` only. The article page reads `window.location.search` for section scrolling. These are two orthogonal URL segments.
 
 ---
 
-## Data Flow
+## Feature 1: Deep-Linkable Anchors (h2/h3)
 
-### Routing Flow
+### Current State
 
-```
-URL / user navigation
-  → @lit-labs/router (inside <blog-app>)
-  → renders <article-list> or <article-view>
-  → article components receive props (article ID, filter params)
-  → article component imports the matching article module
-  → renders rich content components inline
-```
+`_injectHeadingAnchors()` in `devliot-article-page.ts`:
+- Sets `heading.id` from slugified text
+- Renders a `#` anchor button with `position: absolute; left: -1.5em`
+- On click: writes `?section={id}` to clipboard, calls `heading.scrollIntoView({ behavior: 'smooth' })`
+- Does NOT update the URL
 
-### Article Metadata Flow
+`_scrollToSectionFromUrl()`:
+- Reads `window.location.search` (not the hash) for `?section={id}`
+- Calls `target.scrollIntoView({ behavior: 'smooth' })` without header offset compensation
 
-```
-article-registry.ts  (static import array at build time)
-  → <article-list> reads metadata to render cards
-  → <blog-nav> reads metadata for category counts and search corpus
-  → router reads metadata to validate article IDs
-```
+### What Needs to Change
 
-Content and metadata are co-located: each article file exports both a rendered `html` template (the body) and a metadata object (title, date, tags, category, excerpt). The registry imports all articles and assembles the metadata array. This happens at build time — no runtime JSON fetch required.
+**Deep-link URL update (click behavior):**
 
-### Third-Party Library Integration Flow
+The anchor click must update the browser URL so the link is shareable. The current clipboard write + no-URL-update approach is incomplete. The correct behavior: clicking `#` copies the shareable URL to clipboard AND pushes it to the browser URL bar without reloading.
 
-All four content libraries (Prism, KaTeX, Mermaid, Chart.js) require a real DOM node before they can render. The integration pattern is consistent across all of them:
-
-```
-Parent article renders <code-block code="..." language="ts">
-  → <code-block> Lit template renders a <pre><code> placeholder
-  → firstUpdated() lifecycle fires after DOM is created
-  → <code-block> calls Prism.highlightElement(this.shadowRoot.querySelector('code'))
-  → Prism mutates the DOM node with highlighted markup
-  → styles are injected via adoptedStyleSheets (not global CSS — Shadow DOM scoped)
-```
-
-The same pattern applies to KaTeX (`katex.render(formula, this.shadowRoot.querySelector('.target'))`), Mermaid (`mermaid.render(id, definition)` then insert returned SVG), and Chart.js (get canvas ref, call `new Chart(canvas, config)`).
-
-**Shadow DOM scoping rule:** Never call `document.querySelector` inside Lit components. Always use `this.shadowRoot.querySelector`. Third-party libraries that auto-scan the document (Prism's `highlightAll`, Mermaid's auto-init) must be initialized with `manual: true` / `startOnLoad: false` to prevent them from running before components mount.
-
-### Search Flow
-
-```
-User types in <blog-nav>
-  → search input dispatched as custom event to <blog-app>
-  → <blog-app> passes query to search module (Fuse.js)
-  → Fuse.js searches pre-built index (from article-registry metadata)
-  → results list passed to <article-list> via reactive property
-  → <article-list> re-renders filtered card set
-```
-
-The search index is built in memory at app startup from the metadata array already imported by the registry. No separate JSON file, no network request.
-
----
-
-## Routing on GitHub Pages
-
-GitHub Pages does not support server-side URL rewriting. A request to `/articles/my-post` returns a 404 unless a file exists at that path.
-
-**Recommended approach: hash routing.**
-
-Use `@lit-labs/router` with hash-based URLs (`/#/articles/my-post`). The page loaded is always `index.html` — GitHub Pages serves it correctly because the hash is client-only. The router reads `window.location.hash` and renders the matching view.
-
-Note: there is an open issue that `@lit-labs/router` has a bug with hash pattern matching (GitHub issue #3517). **Fallback plan:** implement a thin custom router using `hashchange` event and a switch over `window.location.hash`. For a blog with ~5 routes (home, article, category, tag, search), a custom router is 30 lines and has zero dependencies.
-
-**404.html redirect trick** (alternative): add a `404.html` that copies the path into `sessionStorage` then redirects to `/index.html`, which reads it and navigates. This enables clean URLs but adds fragility. Not recommended for a first iteration.
-
----
-
-## Patterns to Follow
-
-### Pattern 1: Leaf Components Are Pure Renderers
-
-Content components (`<code-block>`, `<math-formula>`, etc.) receive their data as properties, render a DOM placeholder, then invoke the third-party library in `firstUpdated()`. They own nothing outside their shadow root, dispatch no events, have no side effects beyond their own DOM.
-
+Implementation: change the click handler in `_injectHeadingAnchors()` to call:
 ```typescript
-@customElement('code-block')
-export class CodeBlock extends LitElement {
-  @property() code = '';
-  @property() language = 'typescript';
+const sectionUrl = `${window.location.origin}${window.location.pathname}?section=${id}${window.location.hash}`;
+history.pushState(null, '', `?section=${id}${window.location.hash}`);
+navigator.clipboard.writeText(sectionUrl).catch(() => {});
+```
 
-  static styles = [prismTheme]; // imported CSS-in-JS, scoped to shadow root
+`history.pushState` updates the URL bar without triggering a page reload or hashchange event. This preserves the `#/article/{slug}` hash intact while appending `?section={id}` to the search segment.
 
-  render() {
-    return html`<pre><code class="language-${this.language}">${this.code}</code></pre>`;
-  }
+**Header-offset scroll (scroll-margin-top vs JS):**
 
-  override firstUpdated() {
-    const el = this.shadowRoot!.querySelector('code')!;
-    Prism.highlightElement(el);
+The sticky header is `devliot-header` with `position: sticky; top: 0` in `header.css`. Its rendered height is approximately 48–60px depending on viewport (logo at `font-size: 6px–10px` + padding). The exact height is not fixed — it depends on the rendered ASCII logo height.
+
+Recommendation: **CSS `scroll-margin-top` via CSS custom property, set dynamically by JS once on mount.**
+
+Rationale:
+- `scroll-margin-top` works with `scrollIntoView()` natively (MDN-confirmed behavior). When set on a heading, the browser adds that margin above it when scrolling it into view, which offsets the sticky header.
+- A hardcoded pixel value in CSS would break if header height changes responsively.
+- The correct pattern: on mount, measure the header height and write it to a CSS custom property on `:root`, then apply `scroll-margin-top: var(--header-height)` to headings in article CSS.
+
+CSS custom properties pierce shadow DOM boundaries by design. The `--header-height` variable set on `document.documentElement` is readable inside any component's shadow root CSS.
+
+**Integration points:**
+
+| What | File | Change type |
+|------|------|-------------|
+| Measure header height, set `--header-height` on `:root` | `devliot-app.ts` | Modify: add `ResizeObserver` on `<devliot-header>` in `firstUpdated()` |
+| Apply `scroll-margin-top: var(--header-height)` to `h2, h3` | `src/styles/article.css` | Modify: add scroll-margin-top rule |
+| Update anchor click handler to `history.pushState` | `devliot-article-page.ts` → `_injectHeadingAnchors()` | Modify: replace clipboard-only with pushState + clipboard |
+| Handle `popstate` event for browser back/forward with section | `devliot-article-page.ts` | Modify: add `popstate` listener alongside hashchange |
+
+**No new files required for this feature.**
+
+### Concrete Implementation Sketch
+
+In `devliot-app.ts`, after `firstUpdated()`:
+```typescript
+firstUpdated() {
+  const header = this.shadowRoot?.querySelector('devliot-header');
+  if (header) {
+    const ro = new ResizeObserver(([entry]) => {
+      document.documentElement.style.setProperty(
+        '--header-height',
+        `${entry.contentRect.height}px`
+      );
+    });
+    ro.observe(header);
   }
 }
 ```
 
-### Pattern 2: Articles Are Static Lit Modules
-
-Articles are TypeScript files that export a metadata object and an `html` tagged template literal. They are not components — they are data. The article view component imports them and renders them as slots or inlined `html`.
-
-```typescript
-// src/articles/2024-intro-to-transformers.ts
-import { html } from 'lit';
-
-export const meta = {
-  id: '2024-intro-to-transformers',
-  title: 'Intro to Transformers',
-  date: '2024-11-15',
-  category: 'AI',
-  tags: ['AI', 'NLP', 'Deep Learning'],
-  excerpt: 'A practical guide to the transformer architecture.',
-};
-
-export const content = html`
-  <h2>What is Attention?</h2>
-  <p>The self-attention mechanism...</p>
-  <code-block language="python" .code=${'model = TransformerModel()'}></code-block>
-  <math-formula .formula=${'E = mc^2'}></math-formula>
-`;
-```
-
-### Pattern 3: Article Registry as Single Source of Truth
-
-One file imports all articles and builds the metadata index. The router, listing views, and search all read from this one registry. Adding a new article means: create the `.ts` file, add one import and one metadata push in the registry.
-
-```typescript
-// src/articles/registry.ts
-import { meta as intro, content as introContent } from './2024-intro-to-transformers';
-// ...
-
-export const articles = [intro, ...];
-export const articleContents = new Map([
-  [intro.id, introContent],
-  // ...
-]);
-```
-
-### Pattern 4: CSS Variables for Theming Across Shadow Roots
-
-Shadow DOM prevents global styles from reaching component internals. Use CSS custom properties (CSS variables) defined on `:root` in a global stylesheet. They pierce shadow boundaries and allow consistent theming (colors, fonts, spacing) without disabling Shadow DOM.
-
+In `src/styles/article.css`:
 ```css
-/* global.css */
-:root {
-  --color-text: #1a1a1a;
-  --font-mono: 'JetBrains Mono', monospace;
-  --spacing-base: 1rem;
+h2, h3, h4, h5, h6 {
+  scroll-margin-top: var(--header-height, 64px);
 }
 ```
 
----
+The `64px` fallback covers the case where the JS hasn't run yet (SSR, first paint).
 
-## Anti-Patterns to Avoid
-
-### Anti-Pattern 1: Calling Third-Party Library Auto-Init Before Components Mount
-
-**What:** Importing Mermaid or Prism at the top level and letting them scan `document` on `DOMContentLoaded`.
-**Why bad:** Components mount asynchronously. The library runs before Shadow DOM content exists and finds nothing. It also cannot access content inside shadow roots via `document.querySelector`.
-**Instead:** Set `Prism.manual = true` before any import. Set `mermaid.initialize({ startOnLoad: false })`. Call APIs manually inside `firstUpdated()` targeting `this.shadowRoot`.
-
-### Anti-Pattern 2: Mutating Lit-Managed DOM Directly
-
-**What:** Third-party library modifies a node that Lit's template controls (e.g., the `<code>` element's `innerHTML`).
-**Why bad:** On next re-render, Lit overwrites the mutation. Highlighting disappears on any property change.
-**Instead:** Either (a) render a placeholder, call the library in `firstUpdated` only once, and never re-render that node; or (b) for dynamic content, use `updated()` with a guard to re-apply highlighting only when the `code` property changes.
-
-### Anti-Pattern 3: Putting Article Content in a Separate Fetch Call
-
-**What:** Articles stored as JSON or Markdown files, fetched at runtime with `fetch('/articles/foo.json')`.
-**Why bad:** Network latency on every article open. Requires additional bundler config. Adds async error handling everywhere. Offers no benefit for a small blog.
-**Instead:** Static imports at build time. Vite tree-shakes unused articles. Bundle size is acceptable for a blog that loads one article at a time via lazy import.
-
-### Anti-Pattern 4: Disabling Shadow DOM for Articles
-
-**What:** Override `createRenderRoot()` to return `this` so article content renders in the light DOM.
-**Why bad:** Loses style encapsulation. Global styles (Prism theme, KaTeX fonts) bleed across the whole page. Third-party reset CSS can corrupt article typography.
-**Instead:** Keep Shadow DOM. Use CSS custom properties for cross-component theming. Apply third-party CSS via `adoptedStyleSheets` or `static styles` scoped to the component.
-
-### Anti-Pattern 5: One Giant Article Component
-
-**What:** A single `<blog-article>` component that hard-switches on article ID inside one `render()`.
-**Why bad:** All article content is bundled together. Load times grow with every post.
-**Instead:** Dynamic imports per article. The article view does `const { content } = await import('./articles/${id}.js')`. Vite splits each article into its own chunk automatically.
-
----
-
-## Build Order (Phase Dependencies)
-
-The component graph has clear dependency layers. Build bottom-up:
-
-```
-Layer 0 — Types and data contracts
-  article-meta.ts (ArticleMeta type)
-  No dependencies.
-
-Layer 1 — Leaf content components
-  <code-block>, <math-formula>, <diagram-block>, <chart-block>
-  Depend on: third-party libs, article-meta types
-  Can be built and tested in isolation with hardcoded props.
-
-Layer 2 — Article modules
-  src/articles/*.ts
-  Depend on: Layer 1 components (used inline via html``)
-  Each article is independently buildable.
-
-Layer 3 — Article registry
-  src/articles/registry.ts
-  Depends on: Layer 2 articles (imports all of them)
-  This is where all articles are wired together.
-
-Layer 4 — View components
-  <article-card>, <article-list>, <article-view>
-  Depend on: Layer 3 registry, Layer 1 content components
-
-Layer 5 — Navigation and search
-  <blog-nav>
-  Depends on: Layer 3 registry (for category counts), Fuse.js
-
-Layer 6 — Shell and router
-  <blog-app> with routing
-  Depends on: Layer 4 views, Layer 5 nav, router library
-
-Layer 7 — Entry point and build config
-  index.html, vite.config.ts, GitHub Actions workflow
-  Depends on: everything
+In `_injectHeadingAnchors()` click handler:
+```typescript
+anchor.addEventListener('click', (e: MouseEvent) => {
+  e.preventDefault();
+  history.pushState(null, '', `?section=${id}${window.location.hash}`);
+  heading.scrollIntoView({ behavior: 'smooth' });
+  navigator.clipboard.writeText(window.location.href).catch(() => {});
+});
 ```
 
-Implication for roadmap phases: Layers 0-1 (foundation + content components) should be a dedicated phase before any article work begins. Articles cannot be written until their content components are stable. The router and shell can be scaffolded early but should be fully completed only after views exist.
+---
+
+## Feature 2: UI Refresh (Header/Footer)
+
+### Current State
+
+- `devliot-header.ts` always shows: ASCII logo (left) + search toggle + hamburger (right)
+- `devliot-footer.ts` always shows: `© 2026 DEVLIOT`
+- `devliot-app.ts` renders both unconditionally with no page-context awareness
+
+### What Needs to Change
+
+**Page-aware header content:**
+
+Per PROJECT.md v2.0 requirement: home = search-only, article = logo-only.
+
+The header must know which page is active. The cleanest integration with the existing HashRouter: pass a `@property() page: 'home' | 'article'` to `devliot-header`.
+
+In `devliot-app.ts`, the router already knows the current route. The render method can pass the page type:
+```typescript
+render() {
+  const page = this.router.currentPage; // 'home' | 'article'
+  return html`
+    <devliot-header .page=${page}></devliot-header>
+    <main>${this.router.outlet()}</main>
+    <devliot-footer></devliot-footer>
+  `;
+}
+```
+
+This requires exposing `currentPage` (or equivalent) from `HashRouter`. The router already tracks `currentPath` — add a getter that derives `'home' | 'article'` from it.
+
+**White header/footer background:**
+
+Currently `background-color: var(--color-surface-alt)` (slightly off-white). Change to `background-color: #ffffff` or `var(--color-surface)` in `header.css` and `footer.css`.
+
+**Search relocation (home = search-only):**
+
+On home, the header renders only a search bar (no logo). The ASCII logo remains in the hero section of `devliot-home-page.ts` (already present). The search event dispatch mechanism (`devliot-search` custom event bubbling up to `devliot-home-page`) stays unchanged.
+
+On article, the header renders only the logo (no search). Search is irrelevant in article context.
+
+**Integration points:**
+
+| What | File | Change type |
+|------|------|-------------|
+| Add `page` property to header | `devliot-header.ts` | Modify: add `@property() page: 'home' \| 'article' = 'home'` + conditional render |
+| Expose current page from router | `src/utils/hash-router.ts` | Modify: add `get currentPage()` getter |
+| Pass page to header | `devliot-app.ts` | Modify: `.page=${this.router.currentPage}` in render |
+| White background for header/footer | `src/styles/header.css`, `src/styles/footer.css` | Modify: background color |
+| Header CSS adjustments for two modes | `src/styles/header.css` | Modify: conditional layout styles |
+
+**No new files required for this feature.**
 
 ---
 
-## Scalability Considerations
+## Feature 3: Per-Article Bibliography
 
-This is a personal blog. These constraints are relevant at current scale, not at 10K users.
+### index.json Schema Extension
 
-| Concern | Now (1-50 articles) | Later (100+ articles) |
-|---------|--------------------|-----------------------|
-| Bundle size | Static imports fine | Switch to dynamic `import()` per article (code splitting) |
-| Search | In-memory Fuse.js on metadata | Still fine; Fuse.js handles 10K items easily |
-| Build time | Instant with Vite | Still fast; no Markdown pipeline, pure TS |
-| GitHub Pages limits | None relevant | None relevant (static files) |
+Add a `bibliography` array to each article entry in `public/articles/index.json`. Each entry is a reference object.
+
+Proposed schema:
+```json
+{
+  "articles": [
+    {
+      "slug": "01-demo-article",
+      "title": "Article Components Demo",
+      "date": "2026-04-11",
+      "category": "Tutorial",
+      "tags": ["demo", "components", "reference"],
+      "description": "...",
+      "image": "articles/01-demo-article/og-image.png",
+      "readingTime": 2,
+      "bibliography": [
+        {
+          "id": "ref1",
+          "type": "article",
+          "authors": ["Smith, J.", "Doe, A."],
+          "title": "Attention Is All You Need",
+          "year": 2017,
+          "url": "https://arxiv.org/abs/1706.03762",
+          "venue": "NeurIPS 2017"
+        },
+        {
+          "id": "ref2",
+          "type": "book",
+          "authors": ["LeCun, Y."],
+          "title": "Deep Learning",
+          "year": 2016,
+          "publisher": "MIT Press"
+        },
+        {
+          "id": "ref3",
+          "type": "web",
+          "authors": ["Karpathy, A."],
+          "title": "The Unreasonable Effectiveness of RNNs",
+          "year": 2015,
+          "url": "http://karpathy.github.io/2015/05/21/rnn-effectiveness/",
+          "accessed": "2026-04-01"
+        }
+      ]
+    }
+  ]
+}
+```
+
+Fields:
+- `id` — used for `[ref1]` citation anchors inside article HTML (future feature — not required for v2.0)
+- `type` — `"article"` | `"book"` | `"web"` — drives formatting logic
+- `authors` — array of strings in "Last, F." format
+- `title` — required
+- `year` — required
+- `url` — optional (links the title)
+- `venue` — for academic papers (conference/journal)
+- `publisher` — for books
+- `accessed` — for web references
+
+Articles with no bibliography omit the field entirely (treated as empty by the component).
+
+### Rendering Component
+
+New Lit component `devliot-bibliography.ts` (or inline rendering inside `devliot-article-page.ts`). Given the simplicity (a formatted list), inline rendering in article page is preferred — no need for a new element.
+
+In `devliot-article-page.ts`:
+- Add `_bibliography` to `@state()` (typed array)
+- Load it from the `bibliography` field of the fetched metadata
+- Render a `<section class="bibliography">` below the tags nav
+
+Placement: bibliography appears after article content + after tag navigation, before the footer.
+
+Format: numbered list `[1] Author, A., Author, B. (year). Title. Venue. URL.`
+
+**Integration points:**
+
+| What | File | Change type |
+|------|------|-------------|
+| Add `bibliography` field to index.json | `public/articles/index.json` | Modify: add array per article |
+| Add `_bibliography` state + render | `devliot-article-page.ts` | Modify: load + render bibliography section |
+| Add bibliography styles | `src/styles/article.css` | Modify: add `.bibliography` section styles |
+| Update `enrichIndexJson` to preserve bibliography | `scripts/build-og-pages.mjs` | Verify: `JSON.parse`/`JSON.stringify` round-trip preserves unknown fields — it does, no change needed |
+| Update TypeScript interface | `devliot-article-page.ts` | Modify: add `BibEntry` interface |
+
+**No new files required for this feature.** The bibliography is metadata-only — no separate data file.
+
+---
+
+## Feature 4: Per-Article Authors
+
+### index.json Schema Extension
+
+Add an `authors` field to each article entry:
+```json
+{
+  "slug": "01-demo-article",
+  "title": "Article Components Demo",
+  "date": "2026-04-11",
+  "authors": [
+    {
+      "name": "Eliott Barril",
+      "role": "author",
+      "url": "https://github.com/devliot"
+    }
+  ],
+  "bibliography": [...]
+}
+```
+
+Fields:
+- `name` — display name (required)
+- `role` — `"author"` | `"co-author"` (optional, default `"author"`)
+- `url` — profile link (optional)
+
+Single-author articles use a single-element array. Multi-author articles list all. Articles without an `authors` field are treated as anonymous.
+
+### Display Location
+
+Authors display in the article metadata bar, alongside date and reading time. The existing metadata line in `devliot-article-page.ts` renders:
+```
+April 11, 2026  ·  2 min read
+```
+
+Extend to:
+```
+April 11, 2026  ·  2 min read  ·  Eliott Barril
+```
+
+For multi-author: `Eliott Barril & Jane Doe` or `Eliott Barril, Jane Doe`.
+
+If `url` is present, the name is a link. If not, plain text.
+
+This placement is preferred over a dedicated section below the article because: (a) it matches established blog conventions (Substack, Medium), (b) it avoids disrupting the content flow, (c) it is scannable before reading.
+
+**Integration points:**
+
+| What | File | Change type |
+|------|------|-------------|
+| Add `authors` field to index.json | `public/articles/index.json` | Modify: add array per article |
+| Add `_authors` state + render in meta bar | `devliot-article-page.ts` | Modify: load + inline render |
+| Update TypeScript interface | `devliot-article-page.ts` | Modify: add `Author` interface |
+| No style changes needed | `src/styles/article.css` | None — uses existing `.article-meta` styles |
+
+**No new files required for this feature.**
+
+---
+
+## Feature 5: Sitemap XML
+
+### Where it Fits in the Build Pipeline
+
+The existing build script is:
+```
+node scripts/build-og-pages.mjs --enrich
+  && node scripts/build-search-index.mjs
+  && tsc
+  && vite build
+  && node scripts/build-og-pages.mjs --generate
+```
+
+Sitemap generation runs at the end, after `vite build`, because it writes to `dist/`. It reads from the already-enriched `public/articles/index.json`.
+
+New build script: `scripts/build-sitemap.mjs`
+
+Updated build sequence:
+```
+node scripts/build-og-pages.mjs --enrich
+  && node scripts/build-search-index.mjs
+  && tsc
+  && vite build
+  && node scripts/build-og-pages.mjs --generate
+  && node scripts/build-sitemap.mjs
+```
+
+### Sitemap Content
+
+The site uses hash-based routing (`/#/article/{slug}`). Search engines treat the fragment as client-side-only and ignore it — they only index `https://devliot.github.io/`. However, the existing OG pages at `dist/articles/{slug}/og.html` are real static paths that crawlers can follow. The sitemap should list:
+
+1. The root URL: `https://devliot.github.io/` (the SPA shell — home page)
+2. Each OG page: `https://devliot.github.io/articles/{slug}/og.html` — these are real static URLs with full OG metadata
+
+Including only the root URL is minimal but valid. Including OG pages gives crawlers a path to each article's metadata.
+
+### Script Implementation
+
+`scripts/build-sitemap.mjs` follows the same pattern as `build-og-pages.mjs`:
+- Reads `public/articles/index.json` (for slugs and dates)
+- Writes `dist/sitemap.xml`
+- Pure Node.js — no npm dependencies needed; XML is simple string templating
+
+Sitemap structure:
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://devliot.github.io/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://devliot.github.io/articles/01-demo-article/og.html</loc>
+    <lastmod>2026-04-11</lastmod>
+    <changefreq>never</changefreq>
+    <priority>0.8</priority>
+  </url>
+</urlset>
+```
+
+Note: `lastmod` uses the article's `date` field from index.json. `changefreq: never` for articles (they don't change after publish). Add a `robots.txt` to `public/` pointing to the sitemap — it is copied verbatim to `dist/` by Vite.
+
+**Integration points:**
+
+| What | File | Change type |
+|------|------|-------------|
+| New sitemap generator script | `scripts/build-sitemap.mjs` | New file |
+| Add script to build pipeline | `package.json` scripts.build | Modify: append `&& node scripts/build-sitemap.mjs` |
+| Add robots.txt pointing to sitemap | `public/robots.txt` | New file |
+
+**`dist/sitemap.xml` is a generated artifact — never committed to source.**
+
+---
+
+## New vs. Modified: Complete Split
+
+### New Files
+
+| File | Purpose |
+|------|---------|
+| `scripts/build-sitemap.mjs` | Sitemap XML generator |
+| `public/robots.txt` | Points crawlers to sitemap |
+
+### Modified Files
+
+| File | Features Affected |
+|------|------------------|
+| `src/devliot-app.ts` | Header ResizeObserver (feature 1), pass `page` to header (feature 2) |
+| `src/utils/hash-router.ts` | Expose `currentPage` getter (feature 2) |
+| `src/components/devliot-header.ts` | Page-aware conditional rendering (feature 2) |
+| `src/components/devliot-footer.ts` | Background color change (feature 2) |
+| `src/pages/devliot-article-page.ts` | Deep-link pushState (feature 1), authors (feature 4), bibliography (feature 3) |
+| `src/styles/article.css` | `scroll-margin-top` (feature 1), bibliography styles (feature 3) |
+| `src/styles/header.css` | White background + two-mode layout (feature 2) |
+| `src/styles/footer.css` | White background (feature 2) |
+| `public/articles/index.json` | Add `authors` + `bibliography` fields (features 3, 4) |
+| `package.json` | Extend build script with sitemap step (feature 5) |
+
+---
+
+## Recommended Build Order
+
+Dependencies between features drive this ordering:
+
+**Phase 1: Data schema first (index.json)**
+
+Add `authors` and `bibliography` fields to `index.json` before any component work. Both features 3 and 4 read from this file. Do it once, do it right, then build components against the real data shape. The `build-og-pages.mjs --enrich` step round-trips `index.json` through `JSON.parse`/`JSON.stringify` — verify the enrichment step preserves new fields (it does, since it only writes `readingTime`).
+
+**Phase 2: Deep-linkable anchors**
+
+This is the most architecturally significant change. It touches `devliot-app.ts`, `hash-router.ts`, `devliot-article-page.ts`, and `article.css`. Getting the header ResizeObserver → `--header-height` CSS variable pipeline working first means subsequent phases don't need to re-examine scrolling behavior. This has no dependencies on features 2, 3, or 4.
+
+**Phase 3: UI refresh (header/footer)**
+
+Depends on Phase 2 having established the `ResizeObserver` in `devliot-app.ts`. The header restructuring is independent of article content features (3 and 4). Build this before bibliography/authors because header height changes could affect `--header-height`, and it's better to finalize the header before testing scroll behavior end-to-end.
+
+**Phase 4: Authors**
+
+Simpler than bibliography (no list rendering, no type dispatch logic). Renders in the existing metadata bar. Serves as a warm-up for Phase 5's more complex rendering.
+
+**Phase 5: Bibliography**
+
+Most complex rendering in this milestone (type-dependent formatting: article vs book vs web). Build last among content features. Depends on Phase 1 (schema must exist in index.json). Independent of features 1, 2, 4.
+
+**Phase 6: Sitemap**
+
+Pure build artifact. No runtime components. No dependencies on features 1–5 except that `authors` and `bibliography` in index.json may be included in sitemap metadata in the future — but for v2.0 the sitemap only reads `slug` and `date`. Can be built any time after the build pipeline is understood. Lowest risk, build last.
+
+**Dependency graph:**
+```
+Schema (index.json)
+  ├── Authors rendering (article-page)
+  └── Bibliography rendering (article-page)
+
+Header ResizeObserver (app)
+  ├── Deep-link scroll-margin-top (article-page + CSS)
+  └── UI refresh header height (header.css)
+
+Sitemap (standalone — no deps on other v2.0 features)
+```
+
+---
+
+## Key Architectural Constraints to Respect
+
+**Shadow DOM and CSS custom properties:** `--header-height` must be set on `document.documentElement` (not on a shadow host) to be accessible inside `devliot-article-page`'s shadow root. CSS variables pierce shadow boundaries only when defined on an ancestor in the light DOM.
+
+**HashRouter and `window.location.search`:** The current design uses `?section=` in `window.location.search` (before the `#`). `history.pushState` can update the search segment without affecting `window.location.hash`. This means the HashRouter's `_onHashChange` handler is NOT triggered by pushState calls that only change the search segment — section navigation does not re-render the router. This is the correct behavior.
+
+**`build-og-pages.mjs --enrich` idempotency:** The enrich step reads index.json, computes `readingTime`, and writes back. It uses `JSON.parse`/`JSON.stringify` with 2-space indent. Any manually-added `authors` or `bibliography` fields will be preserved through this round-trip. Confirmed: the script only explicitly sets `article.readingTime` — all other fields pass through untouched.
+
+**No new npm dependencies required** for any of these 5 features. All are implementable with existing stack (Lit, ResizeObserver Web API, history.pushState Web API, Node.js built-in fs for sitemap).
 
 ---
 
 ## Sources
 
-- Lit Shadow DOM docs: https://lit.dev/docs/components/shadow-dom/ — HIGH confidence
-- Lit lifecycle docs: https://lit.dev/docs/components/lifecycle/ — HIGH confidence
-- KaTeX in Lit issue + web component wrapper pattern: https://github.com/Polymer/lit-html/issues/761 — HIGH confidence
-- @lit-labs/router hash routing bug: https://github.com/lit/lit/issues/3517 — MEDIUM confidence (open issue, may be resolved)
-- GitHub Pages SPA routing challenge: https://github.com/orgs/community/discussions/64096 — HIGH confidence
-- Mermaid initialization API: https://mermaid.js.org/config/usage.html — HIGH confidence (official docs)
-- Prism manual mode + `highlightAllUnder` for Shadow DOM: community documented, Prism GitHub — MEDIUM confidence
-- Modern Lit stack (Vite + TypeScript): https://dev.to/matsuuu/the-modern-2025-web-components-tech-stack-1l00 — MEDIUM confidence
-- D3 + Lit day-journal (Shadow DOM selection pattern): https://medium.com/@sbsends/lit-day-3-d3-js-graphs-f5c3dd1627d7 — MEDIUM confidence
-- Fuse.js for static search: https://yihui.org/en/2023/09/fuse-search/ — MEDIUM confidence
+- `scroll-margin-top` with `scrollIntoView()`: https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-margin-top — HIGH confidence
+- Dynamic scroll offset via CSS custom properties: https://kurtrank.me/dynamic-scroll-offset-via-custom-properties/ — MEDIUM confidence
+- CSS custom properties pierce shadow DOM (Lit docs): https://lit.dev/docs/components/styles/ — HIGH confidence
+- `history.pushState` without hashchange: https://developer.mozilla.org/en-US/docs/Web/API/History/pushState — HIGH confidence
+- Sitemap.xml for hash-based GitHub Pages SPAs: https://github.com/cicirello/generate-sitemap — MEDIUM confidence
+- Sitemap XML spec: https://www.sitemaps.org/protocol.html — HIGH confidence
