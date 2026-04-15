@@ -4,8 +4,8 @@ milestone: v2.0
 milestone_name: — Deep links, épuration UI, attribution & discovery
 status: executing
 stopped_at: Phase 8 UI-SPEC approved
-last_updated: "2026-04-15T18:59:36.151Z"
-last_activity: 2026-04-15 -- Phase 8 planning complete
+last_updated: "2026-04-15T19:10:48.562Z"
+last_activity: 2026-04-15 -- Phase 08 execution started
 progress:
   total_phases: 5
   completed_phases: 1
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-15)
 
 **Core value:** Readers can consume well-formatted technical articles where code, math, diagrams, and charts render beautifully and are easy to follow.
-**Current focus:** Phase 07 — deep-linkable-anchors
+**Current focus:** Phase 08 — ui-refresh
 
 ## Current Position
 
-Phase: 8
-Plan: Not started
-Status: Ready to execute
-Last activity: 2026-04-15 -- Phase 8 planning complete
+Phase: 08 (ui-refresh) — EXECUTING
+Plan: 1 of 2
+Status: Executing Phase 08
+Last activity: 2026-04-15 -- Phase 08 execution started
 
 Progress: [----------] 0% (0/6 phases complete)
 
