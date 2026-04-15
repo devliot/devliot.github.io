@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
-const HOME_URL = '/#/';
-const DEMO_ARTICLE_URL = '/#/article/01-demo-article';
+const HOME_URL = '/';
+const DEMO_ARTICLE_URL = '/article/01-demo-article';
 
 test.describe('Navigation & Discovery (Phase 4)', () => {
 
@@ -111,9 +111,9 @@ test.describe('Navigation & Discovery (Phase 4)', () => {
     }
   });
 
-  // NAV-03: Direct navigation to /#/?tag=X activates filter on load
+  // NAV-03: Direct navigation to /?tag=X activates filter on load
   test('NAV-03: direct URL with tag param activates filter on page load', async ({ page }) => {
-    await page.goto('/#/?tag=demo');
+    await page.goto('/?tag=demo');
     const homePage = page.locator('devliot-home-page');
     await expect(homePage.locator('.chip').first()).toBeVisible({ timeout: 10000 });
 
@@ -212,7 +212,7 @@ test.describe('Navigation & Discovery (Phase 4)', () => {
   // D-10: Empty state for filter
   test('D-10: empty filter result shows "No articles found."', async ({ page }) => {
     // Navigate with a tag that doesn't exist
-    await page.goto('/#/?tag=nonexistent-tag-xyz');
+    await page.goto('/?tag=nonexistent-tag-xyz');
     const homePage = page.locator('devliot-home-page');
 
     // Wait for component to load

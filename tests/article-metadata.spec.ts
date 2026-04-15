@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Article Metadata — META-02 & META-03 (dev server)', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/#/article/01-demo-article');
+    await page.goto('/article/01-demo-article');
     // Wait for article content to load (reuse existing pattern)
     await page.locator('devliot-article-page').locator('article h1').waitFor({ timeout: 10000 });
   });
@@ -97,11 +97,11 @@ test.describe('Article Metadata — META-01 (OG pages, production build)', () =>
     expect(html).toContain('summary_large_image');
   });
 
-  test('META-01: OG page contains redirect script to hash URL', async () => {
+  test('META-01: OG page contains redirect script to path URL', async () => {
     const fs = await import('fs');
     const path = await import('path');
     const ogPath = path.join(process.cwd(), 'dist', 'articles', '01-demo-article', 'og.html');
     const html = fs.readFileSync(ogPath, 'utf8');
-    expect(html).toContain("window.location.replace('/#/article/01-demo-article')");
+    expect(html).toContain('window.location.replace("/article/01-demo-article")');
   });
 });

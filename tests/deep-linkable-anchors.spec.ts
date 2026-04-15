@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // All tests navigate to the demo article
-const DEMO_URL = '/#/article/01-demo-article';
+const DEMO_URL = '/article/01-demo-article';
 
 test.describe('Deep-linkable Anchors', () => {
 
@@ -22,13 +22,13 @@ test.describe('Deep-linkable Anchors', () => {
     const url = new URL(page.url());
     expect(url.searchParams.get('section')).toBeTruthy();
 
-    // Assert the hash still contains the article route
-    expect(page.url()).toContain('#/article/01-demo-article');
+    // Assert the pathname is the article route
+    expect(new URL(page.url()).pathname).toBe('/article/01-demo-article');
   });
 
   // ANCH-02: loading URL with ?section= scrolls to heading
   test('ANCH-02: loading URL with ?section= scrolls to heading', async ({ page }) => {
-    await page.goto('/?section=code-highlighting#/article/01-demo-article');
+    await page.goto('/article/01-demo-article?section=code-highlighting');
     await page.waitForSelector('devliot-article-page article h1', { timeout: 10000 });
     await page.waitForTimeout(1500);
 
@@ -45,7 +45,7 @@ test.describe('Deep-linkable Anchors', () => {
 
   // ANCH-03: heading lands below sticky header (header-height offset)
   test('ANCH-03: heading lands below sticky header', async ({ page }) => {
-    await page.goto('/?section=code-highlighting#/article/01-demo-article');
+    await page.goto('/article/01-demo-article?section=code-highlighting');
     await page.waitForSelector('devliot-article-page article h1', { timeout: 10000 });
     await page.waitForTimeout(1500);
 
@@ -116,7 +116,7 @@ test.describe('Deep-linkable Anchors', () => {
 
   // ANCH-02 edge case: missing section is silently stripped
   test('ANCH-02: missing section is silently stripped', async ({ page }) => {
-    await page.goto('/?section=nonexistent-heading#/article/01-demo-article');
+    await page.goto('/article/01-demo-article?section=nonexistent-heading');
     await page.waitForSelector('devliot-article-page article h1', { timeout: 10000 });
     await page.waitForTimeout(1500);
 

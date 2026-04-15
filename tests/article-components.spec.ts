@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 // All tests navigate to the demo article
-const DEMO_URL = '/#/article/01-demo-article';
+const DEMO_URL = '/article/01-demo-article';
 
 test.describe('Article Components (Phase 3)', () => {
 
@@ -154,7 +154,7 @@ test.describe('Article Components (Phase 3)', () => {
   // A slug like "..evil" (with dots) fails the regex guard and shows the error without a fetch.
   test('ART-01: invalid article slug shows not found message', async ({ page }) => {
     // Navigate to a URL that encodes a slug with special chars that fail slug validation
-    await page.goto('/#/article/..invalid-slug');
+    await page.goto('/article/..invalid-slug');
     const articlePage = page.locator('devliot-article-page');
 
     // Wait for error message — error state renders <article class="error-state"><p>...</p></article>
