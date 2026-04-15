@@ -61,7 +61,7 @@ Plans:
 **Plans:** 2 plans
 Plans:
 - [x] 08-01-PLAN.md — Playwright test stubs (RED) + --color-border token + footer white background
-- [ ] 08-02-PLAN.md — Header variant refactor (scroll shadow, home/article variants, French labels) + app wiring + test repairs
+- [x] 08-02-PLAN.md — Header variant refactor (scroll shadow, home/article variants, French labels) + app wiring + test repairs
 **UI hint**: yes
 
 ### Phase 9: Per-article Authors
