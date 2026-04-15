@@ -4,14 +4,14 @@ milestone: v2.0
 milestone_name: — Deep links, épuration UI, attribution & discovery
 status: executing
 stopped_at: Phase 7 UI-SPEC approved
-last_updated: "2026-04-15T13:37:02.733Z"
+last_updated: "2026-04-15T15:51:34.830Z"
 last_activity: 2026-04-15 -- Phase 07 execution started
 progress:
   total_phases: 5
   completed_phases: 0
-  total_plans: 3
-  completed_plans: 0
-  percent: 0
+  total_plans: 4
+  completed_plans: 2
+  percent: 50
 ---
 
 # Project State
@@ -26,7 +26,7 @@ See: .planning/PROJECT.md (updated 2026-04-15)
 ## Current Position
 
 Phase: 07 (deep-linkable-anchors) — EXECUTING
-Plan: 1 of 3
+Plan: 1 of 4
 Status: Executing Phase 07
 Last activity: 2026-04-15 -- Phase 07 execution started
 
