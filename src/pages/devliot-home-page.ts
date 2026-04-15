@@ -2,14 +2,7 @@ import { LitElement, html, unsafeCSS } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { map } from 'lit/directives/map.js';
 import homeStyles from '../styles/home.css?inline';
-
-interface Article {
-  slug: string;
-  title: string;
-  date: string;
-  category: string;
-  tags: string[];
-}
+import type { Article } from '../types/article.js';
 
 @customElement('devliot-home-page')
 export class DevliotHomePage extends LitElement {
@@ -43,7 +36,7 @@ export class DevliotHomePage extends LitElement {
     try {
       const res = await fetch(`${import.meta.env.BASE_URL}articles/index.json`);
       if (res.ok) {
-        const data = await res.json();
+        const data: { articles: Article[] } = await res.json();
         this._articles = data.articles || [];
       }
     } catch {
