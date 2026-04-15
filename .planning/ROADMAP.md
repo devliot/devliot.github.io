@@ -44,7 +44,7 @@
 **Plans:** 3 plans
 Plans:
 - [x] 07-01-PLAN.md — Test scaffolding (RED stubs) + ResizeObserver --header-height pipeline + CSS scope/scroll-margin
-- [ ] 07-02-PLAN.md — Anchor selector tightening (h2/h3) + pushState click handler (replaces clipboard)
+- [x] 07-02-PLAN.md — Anchor selector tightening (h2/h3) + pushState click handler (replaces clipboard)
 - [ ] 07-03-PLAN.md — Initial-load scroll enhancement + popstate wiring + visual verification
 **UI hint**: yes
 
