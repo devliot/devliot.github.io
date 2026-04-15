@@ -115,7 +115,7 @@ export class DevliotArticlePage extends LitElement {
   }
 
   private _navigateToTag(tag: string): void {
-    window.location.hash = `/?tag=${encodeURIComponent(tag)}`;
+    window.location.href = `/?tag=${encodeURIComponent(tag)}`;
   }
 
   private _injectHeadingAnchors(): void {

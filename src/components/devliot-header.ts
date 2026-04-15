@@ -45,7 +45,7 @@ export class DevliotHeader extends LitElement {
 
   render() {
     return html`
-      <a href="/#/" aria-label="DEVLIOT — accueil">
+      <a href="/" aria-label="DEVLIOT — accueil">
         <pre aria-label="DEVLIOT" class="logo logo--small">
 ██████╗ ███████╗██╗   ██╗██╗     ██╗ ██████╗ ████████╗
 ██╔══██╗██╔════╝██║   ██║██║     ██║██╔═══██╗╚══██╔══╝

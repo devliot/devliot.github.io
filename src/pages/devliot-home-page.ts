@@ -22,13 +22,13 @@ export class DevliotHomePage extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this._fetchArticles();
-    window.addEventListener('hashchange', this._onHashChange);
+    window.addEventListener('popstate', this._onPopState);
     document.addEventListener('devliot-search', this._onSearch as unknown as EventListener);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
-    window.removeEventListener('hashchange', this._onHashChange);
+    window.removeEventListener('popstate', this._onPopState);
     document.removeEventListener('devliot-search', this._onSearch as unknown as EventListener);
   }
 
@@ -44,37 +44,28 @@ export class DevliotHomePage extends LitElement {
     }
 
     // Read initial tag and query from URL after fetch
-    const hash = window.location.hash.slice(1) || '/';
-    const qIdx = hash.indexOf('?');
-    if (qIdx !== -1) {
-      const params = new URLSearchParams(hash.slice(qIdx + 1));
-      const tag = params.get('tag');
-      if (tag) this._activeTag = tag;
+    const params = new URLSearchParams(window.location.search);
+    const tag = params.get('tag');
+    if (tag) this._activeTag = tag;
 
-      const q = params.get('q');
-      if (q) {
-        // Trigger search after a small delay to allow component to render first
-        setTimeout(async () => {
-          await this._initSearch();
-          if (this._searchIndex) {
-            const raw = this._searchIndex.search(q, { limit: 50 });
-            this._searchMatchSlugs = new Set(raw.flatMap((r: { field: string; result: string[] }) => r.result));
-          }
-        }, 100);
-      }
+    const q = params.get('q');
+    if (q) {
+      // Trigger search after a small delay to allow component to render first
+      setTimeout(async () => {
+        await this._initSearch();
+        if (this._searchIndex) {
+          const raw = this._searchIndex.search(q, { limit: 50 });
+          this._searchMatchSlugs = new Set(raw.flatMap((r: { field: string; result: string[] }) => r.result));
+        }
+      }, 100);
     }
   }
 
-  private _onHashChange = () => {
-    const hash = window.location.hash.slice(1) || '/';
-    const qIdx = hash.indexOf('?');
-    if (qIdx !== -1) {
-      const params = new URLSearchParams(hash.slice(qIdx + 1));
-      this._activeTag = params.get('tag');
-      // Do not clear search from hashchange — search is managed by header events
-    } else {
-      this._activeTag = null;
-    }
+  private _onPopState = () => {
+    const params = new URLSearchParams(window.location.search);
+    const tag = params.get('tag');
+    this._activeTag = tag;
+    // Do not clear search from popstate — search is managed by header events
   };
 
   private async _initSearch(): Promise<void> {
@@ -149,8 +140,13 @@ export class DevliotHomePage extends LitElement {
     // Toggle: clicking the active tag deactivates it
     const next = (tag !== null && this._activeTag === tag) ? null : tag;
     this._activeTag = next;
-    const hash = next ? `/?tag=${encodeURIComponent(next)}` : '/';
-    window.location.hash = hash;
+    const url = new URL(window.location.href);
+    if (next) {
+      url.searchParams.set('tag', next);
+    } else {
+      url.searchParams.delete('tag');
+    }
+    history.pushState({}, '', url.pathname + url.search);
   }
 
   render() {
@@ -196,7 +192,7 @@ export class DevliotHomePage extends LitElement {
               <li class="article-row">
                 <span class="article-row__date">${article.date}</span>
                 <span class="article-row__category">${article.category}</span>
-                <a class="article-row__title" href="/#/article/${article.slug}">${article.title}</a>
+                <a class="article-row__title" href="/article/${article.slug}">${article.title}</a>
                 <span class="article-row__tags">
                   ${map(article.tags, (t) => html`
                     <button
