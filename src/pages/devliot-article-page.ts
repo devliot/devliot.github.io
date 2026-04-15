@@ -158,8 +158,7 @@ export class DevliotArticlePage extends LitElement {
   }
 
   private _scrollToSectionFromUrl(): void {
-    const search = window.location.search;
-    const params = new URLSearchParams(search);
+    const params = new URLSearchParams(window.location.search);
     const section = params.get('section');
     if (!section) return;
 
@@ -168,7 +167,14 @@ export class DevliotArticlePage extends LitElement {
 
     const target = article.querySelector<HTMLElement>(`#${CSS.escape(section)}`);
     if (target) {
+      // D-03: replaceState on initial load so back button leaves cleanly
+      history.replaceState({ section }, '', window.location.href);
       target.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // D-08: silent miss -- strip invalid ?section= from URL
+      const url = new URL(window.location.href);
+      url.searchParams.delete('section');
+      history.replaceState(null, '', url.toString());
     }
   }
 
