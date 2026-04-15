@@ -8,6 +8,17 @@ A custom-built static technical blog powered by Lit.js web components, deployed 
 
 Readers can consume well-formatted technical articles where code, math, diagrams, and charts render beautifully and are easy to follow.
 
+## Current Milestone: v2.0 Deep links, épuration UI, attribution & discovery
+
+**Goal:** Rendre les articles partageables à la section près, alléger visuellement le site, et préparer le blog à l'attribution (auteurs, sources) et à la découverte (sitemap).
+
+**Target features:**
+- Deep-linkable anchors (h2 + h3) — click updates URL; loading a URL with an anchor navigates and scrolls with header-height offset
+- UI refresh — white header/footer, home = search-only, article = logo-only
+- Per-article bibliography — declarative references list rendered at article bottom
+- Per-article authors — author/coauthors metadata declared and displayed
+- Sitemap XML — `/sitemap.xml` generated at build for SEO
+
 ## Requirements
 
 ### Validated
@@ -36,7 +47,12 @@ Readers can consume well-formatted technical articles where code, math, diagrams
 
 ### Active
 
-(None — all v1.0 requirements shipped. Next milestone will define new requirements.)
+v2.0 requirements (detailed in REQUIREMENTS.md, mapped to phases in ROADMAP.md):
+- Deep-linkable anchors for h2/h3 with header-aware scroll
+- White header/footer + page-specific header content (home vs article)
+- Per-article bibliography section
+- Per-article author(s) metadata + display
+- Build-time sitemap XML generation
 
 ### Out of Scope
 
@@ -98,4 +114,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-14 after v1.0 milestone*
+*Last updated: 2026-04-15 — v2.0 milestone started*
