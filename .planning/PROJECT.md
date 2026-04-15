@@ -46,11 +46,11 @@ Readers can consume well-formatted technical articles where code, math, diagrams
 - [x] Publication date displayed — v1.0 Phase 5
 - [x] Deep-linkable anchors for h2/h3 with header-aware scroll (ANCH-01..05) — v2.0 Phase 7
 - [x] Path-based SPA routing (`/article/{slug}?section={id}`, no hash fragment) — v2.0 Phase 7
+- [x] White header/footer + page-specific header content (UI-01..04) — v2.0 Phase 8
 
 ### Active
 
 v2.0 requirements (detailed in REQUIREMENTS.md, mapped to phases in ROADMAP.md):
-- White header/footer + page-specific header content (home vs article)
 - Per-article bibliography section
 - Per-article author(s) metadata + display
 - Build-time sitemap XML generation
@@ -58,6 +58,7 @@ v2.0 requirements (detailed in REQUIREMENTS.md, mapped to phases in ROADMAP.md):
 **Progress:**
 - Phase 6: Data Schema Extension — complete (2026-04-15). Centralised Article/Author/BibliographyEntry/ArticleRegistry types in `src/types/article.ts`; demo article populated with authors + typed bibliography; consumer files wired with explicit type imports. Rendering deferred to Phases 9 (author byline) and 10 (bibliography).
 - Phase 7: Deep-linkable Anchors — complete (2026-04-15). PathRouter replaces HashRouter; h2/h3 anchors with `history.pushState`, ResizeObserver-driven sticky-header offset, popstate back/forward, silent miss-strip, GitHub Pages SPA fallback via `dist/404.html`. All 47 Playwright tests green.
+- Phase 8: UI Refresh — complete (2026-04-15). Header and footer migrated to white background; header is now context-aware via reflected `variant` attribute (home = collapsible search affordance, article = DEVLIOT logo); scroll-activated monochrome shadow on header; hamburger button removed; French search labels (`Rechercher un article…`); new `--color-border` token in palette. Phase 7's `--header-height` ResizeObserver pipeline preserved unchanged. 54/54 Playwright tests green.
 
 ### Out of Scope
 
@@ -74,12 +75,13 @@ v2.0 requirements (detailed in REQUIREMENTS.md, mapped to phases in ROADMAP.md):
 
 ## Current State
 
-Shipped v1.0 MVP on 2026-04-14. v2.0 in progress — Phase 7 complete as of 2026-04-15.
+Shipped v1.0 MVP on 2026-04-14. v2.0 in progress — Phase 8 complete as of 2026-04-15.
 - Tech stack: Lit 3.3.1, Vite 8, Shiki 4, KaTeX 0.16, Mermaid 11, Chart.js 4, FlexSearch 0.7
-- 47 Playwright E2E tests across 5 test files (6 new deep-linkable-anchors tests added in Phase 7)
+- 54 Playwright E2E tests across 6 test files (8 new ui-refresh tests added in Phase 8)
 - Path-based SPA routing (`/article/{slug}?section={id}`) with `dist/404.html` fallback for GitHub Pages
+- White shell chrome with context-aware header (home = collapsible search, article = DEVLIOT logo); scroll-activated monochrome shadow; hamburger removed
 - 1 demo article (`01-demo-article`) showcasing all content types
-- Next: Phase 8 UI Refresh — white header/footer and page-specific header content
+- Next: Phase 9 Per-article Authors — render author byline from the typed metadata established in Phase 6
 
 Last updated: 2026-04-15
 
@@ -104,6 +106,8 @@ Last updated: 2026-04-15
 | FlexSearch over Lunr | Fastest client-side search, build-time indexing | Good — instant results |
 | Build-time OG HTML over serverless | No runtime dependency, crawlers get static HTML | Good — zero infrastructure |
 | Monochrome grayscale palette | Content-focused, no color distractions | Good — clean aesthetic |
+| Variant attribute on `devliot-header` (v2.0 Phase 8) | Single component with two render branches keeps state (search toggle) and lifecycle (scroll listener, ResizeObserver host) co-located instead of splitting into two components | Good — minimal app-level wiring (`<devliot-header variant="home\|article">`), Lit's `:host([variant=...])` keeps styling declarative |
+| Scroll-activated header shadow over static border (v2.0 Phase 8) | The shadow is invisible at scrollY=0 and appears as a subtle separator only when content sits behind the sticky header — preserves the borderless look of the page-top while still cueing the boundary on scroll | Good — pure box-shadow + transition, no extra DOM, monochrome rgba |
 
 ## Evolution
 
@@ -123,4 +127,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-15 — Phase 6 complete (data schema extension)*
+*Last updated: 2026-04-15 — Phase 8 complete (UI refresh: white shell, context-aware header)*
