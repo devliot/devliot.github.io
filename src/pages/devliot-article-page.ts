@@ -25,8 +25,14 @@ export class DevliotArticlePage extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
+    window.addEventListener('popstate', this._onPopState);
     // After content loads, scroll to ?section= anchor if present in URL
     this._scrollToSectionFromUrl();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    window.removeEventListener('popstate', this._onPopState);
   }
 
   willUpdate(changed: PropertyValues) {
@@ -156,6 +162,19 @@ export class DevliotArticlePage extends LitElement {
       day: 'numeric',
     }).format(d);
   }
+
+  // D-04: popstate handler re-scrolls to ?section= heading on back/forward navigation
+  private _onPopState = (): void => {
+    const section = new URLSearchParams(window.location.search).get('section');
+    if (section) {
+      const article = this.shadowRoot?.querySelector('article');
+      const target = article?.querySelector<HTMLElement>(`#${CSS.escape(section)}`);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    // If no ?section= present, do nothing -- user backed to initial article state or left article
+  };
 
   private _scrollToSectionFromUrl(): void {
     const params = new URLSearchParams(window.location.search);
