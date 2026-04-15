@@ -2,12 +2,12 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Deep links, épuration UI, attribution & discovery
-status: defining-requirements
-stopped_at: Milestone v2.0 defining requirements
+status: ready
+stopped_at: Roadmap created — Phase 6 ready to plan
 last_updated: "2026-04-15T00:00:00.000Z"
-last_activity: 2026-04-15 -- Milestone v2.0 started
+last_activity: 2026-04-15 -- v2.0 roadmap created, 6 phases, 17 requirements mapped
 progress:
-  total_phases: 0
+  total_phases: 6
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -21,14 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-04-15)
 
 **Core value:** Readers can consume well-formatted technical articles where code, math, diagrams, and charts render beautifully and are easy to follow.
-**Current focus:** Defining v2.0 requirements
+**Current focus:** Phase 6 — Data Schema Extension (v2.0 start)
 
 ## Current Position
 
-Phase: Not started (defining requirements)
+Phase: 6 — Data Schema Extension
 Plan: —
-Status: Defining requirements
-Last activity: 2026-04-15 — Milestone v2.0 started
+Status: Not started
+Last activity: 2026-04-15 — v2.0 roadmap created
+
+Progress: [----------] 0% (0/6 phases complete)
 
 ## Accumulated Context
 
@@ -39,6 +41,11 @@ See PROJECT.md Key Decisions table — all v1.0 decisions marked with outcomes.
 v2.0 context:
 - Deployment stabilized as user site at root (`devliot.github.io`, Vite `base: '/'`)
 - Commit history cleaned: single author `devliot <devliot@proton.me>`, zero Claude/AI mentions
+- v2.0 uses zero new runtime dependencies — all features use existing Lit primitives + Web APIs
+- Deep-link URL strategy: `?section=` query param via `history.replaceState` (NOT hash — would trigger HashRouter remount)
+- Schema extension (Phase 6) is a prerequisite for Phase 9 (authors) and Phase 10 (bibliography)
+- ResizeObserver pipeline established in Phase 7 is consumed by Phase 8 (UI refresh changes header height)
+- Phase 9 (authors) must complete before Phase 11 (sitemap) because both touch `build-og-pages.mjs`
 
 ### Pending Todos
 
@@ -51,5 +58,5 @@ None.
 ## Session Continuity
 
 Last session: 2026-04-15
-Stopped at: v2.0 milestone defining requirements
-Resume: continue `/gsd-new-milestone` workflow
+Stopped at: v2.0 roadmap created — ready to plan Phase 6
+Resume: run `/gsd-plan-phase 6`

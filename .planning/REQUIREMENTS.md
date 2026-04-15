@@ -61,11 +61,25 @@ Exclus explicitement pour v2.0 (conservent les exclusions v1.0 sauf mention) :
 
 ## Traceability
 
-Filled after roadmap creation.
-
 | REQ-ID | Phase | Plan |
 |--------|-------|------|
-| (pending roadmap) | | |
+| AUTHOR-01 | Phase 6 | Pending |
+| REF-01 | Phase 6 | Pending |
+| ANCH-01 | Phase 7 | Pending |
+| ANCH-02 | Phase 7 | Pending |
+| ANCH-03 | Phase 7 | Pending |
+| ANCH-04 | Phase 7 | Pending |
+| ANCH-05 | Phase 7 | Pending |
+| UI-01 | Phase 8 | Pending |
+| UI-02 | Phase 8 | Pending |
+| UI-03 | Phase 8 | Pending |
+| UI-04 | Phase 8 | Pending |
+| AUTHOR-02 | Phase 9 | Pending |
+| AUTHOR-03 | Phase 9 | Pending |
+| REF-02 | Phase 10 | Pending |
+| REF-03 | Phase 10 | Pending |
+| SITE-01 | Phase 11 | Pending |
+| SITE-02 | Phase 11 | Pending |
 
 ---
 
