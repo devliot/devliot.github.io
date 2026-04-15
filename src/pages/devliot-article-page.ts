@@ -116,7 +116,7 @@ export class DevliotArticlePage extends LitElement {
     const article = this.shadowRoot?.querySelector('article');
     if (!article) return;
 
-    const headings = article.querySelectorAll<HTMLHeadingElement>('h2, h3, h4, h5, h6');
+    const headings = article.querySelectorAll<HTMLHeadingElement>('h2, h3');
 
     headings.forEach((heading) => {
       // Avoid double-injecting if updated is called multiple times
