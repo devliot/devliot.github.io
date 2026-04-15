@@ -175,7 +175,7 @@ export class DevliotHomePage extends LitElement {
         <div class="filter-chips" role="group" aria-label="Filter by tag">
           <button
             class="chip ${!this._activeTag ? 'chip--active' : ''}"
-            aria-pressed="${!this._activeTag}"
+            aria-pressed="${this._activeTag === null ? 'true' : 'false'}"
             @click=${() => this._setActiveTag(null)}
           >All</button>
           ${map(tags, (tag) => html`
