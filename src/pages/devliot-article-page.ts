@@ -5,7 +5,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import articleStyles from '../styles/article.css?inline';
 import codeStyles from '../styles/code.css?inline';
 import diagramStyles from '../styles/devliot-diagram.css?inline';
-import type { ArticleRegistry, Author } from '../types/article.js';
+import type { ArticleRegistry, Author, BibliographyEntry } from '../types/article.js';
 
 /** Allowlist: only alphanumeric characters, hyphens, and underscores (T-03-02: path traversal prevention). */
 const SLUG_PATTERN = /^[a-zA-Z0-9_-]+$/;
@@ -23,6 +23,7 @@ export class DevliotArticlePage extends LitElement {
   @state() private _date = '';
   @state() private _readingTime = 0;
   @state() private _authors: Author[] = [];
+  @state() private _bibliography: BibliographyEntry[] = [];
 
   connectedCallback() {
     super.connectedCallback();
@@ -69,6 +70,7 @@ export class DevliotArticlePage extends LitElement {
     this._date = '';
     this._readingTime = 0;
     this._authors = [];
+    this._bibliography = [];
 
     try {
       const url = `${import.meta.env.BASE_URL}articles/${currentSlug}/index.html`;
@@ -110,6 +112,7 @@ export class DevliotArticlePage extends LitElement {
           this._date = meta.date || '';
           this._readingTime = meta.readingTime || 0;
           this._authors = meta.authors || [];
+          this._bibliography = meta.bibliography || [];
         }
       }
     } catch {
@@ -190,6 +193,42 @@ export class DevliotArticlePage extends LitElement {
     return html`<p class="article-byline">par ${formatted}</p>`;
   }
 
+  private _renderReferences() {
+    if (!this._bibliography || this._bibliography.length === 0) return html``;
+
+    return html`
+      <section class="references">
+        <h2>Références</h2>
+        <ol class="ref-list">
+          ${this._bibliography.map((entry, i) => {
+            const n = i + 1;
+            const titleEl = entry.url
+              ? html`<a href="${entry.url}" target="_blank" rel="noopener noreferrer">${entry.title}</a>`
+              : html`${entry.title}`;
+
+            // D-08: authors as-provided, joined with ", "
+            const authors = entry.authors?.map(a => a.name).join(', ') ?? '';
+
+            // D-07: format per type
+            // web: Title. (no authors prefix)
+            if (entry.type === 'web') {
+              return html`<li id="ref-${n}" class="ref-entry">[${n}] ${titleEl}.</li>`;
+            }
+
+            // article: Authors — Title. Year.
+            // book: Authors — Title. Publisher, Year.
+            const yearStr = entry.year ? ` ${entry.year}` : '';
+            const publisherStr = entry.type === 'book' && entry.publisher
+              ? ` ${entry.publisher},`
+              : '';
+
+            return html`<li id="ref-${n}" class="ref-entry">[${n}] ${authors ? html`${authors} \u2014 ` : ''}${titleEl}.${publisherStr}${yearStr}.</li>`;
+          })}
+        </ol>
+      </section>
+    `;
+  }
+
   // D-04: popstate handler re-scrolls to ?section= heading on back/forward navigation
   private _onPopState = (): void => {
     const section = new URLSearchParams(window.location.search).get('section');
@@ -236,6 +275,7 @@ export class DevliotArticlePage extends LitElement {
       ` : ''}
       ${this._renderByline()}
       <article>${unsafeHTML(this._html)}</article>
+      ${this._renderReferences()}
       ${this._tags.length > 0 || this._category ? html`
         <nav class="article-tags" aria-label="Article tags">
           ${this._category ? html`<button class="tag-link" @click=${() => this._navigateToTag(this._category)}>${this._category}</button>` : ''}
