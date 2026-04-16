@@ -5,7 +5,7 @@ import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import articleStyles from '../styles/article.css?inline';
 import codeStyles from '../styles/code.css?inline';
 import diagramStyles from '../styles/devliot-diagram.css?inline';
-import type { ArticleRegistry } from '../types/article.js';
+import type { ArticleRegistry, Author } from '../types/article.js';
 
 /** Allowlist: only alphanumeric characters, hyphens, and underscores (T-03-02: path traversal prevention). */
 const SLUG_PATTERN = /^[a-zA-Z0-9_-]+$/;
@@ -22,6 +22,7 @@ export class DevliotArticlePage extends LitElement {
   @state() private _category = '';
   @state() private _date = '';
   @state() private _readingTime = 0;
+  @state() private _authors: Author[] = [];
 
   connectedCallback() {
     super.connectedCallback();
@@ -67,6 +68,7 @@ export class DevliotArticlePage extends LitElement {
     this._category = '';
     this._date = '';
     this._readingTime = 0;
+    this._authors = [];
 
     try {
       const url = `${import.meta.env.BASE_URL}articles/${currentSlug}/index.html`;
@@ -107,6 +109,7 @@ export class DevliotArticlePage extends LitElement {
           this._category = meta.category || '';
           this._date = meta.date || '';
           this._readingTime = meta.readingTime || 0;
+          this._authors = meta.authors || [];
         }
       }
     } catch {
@@ -163,6 +166,30 @@ export class DevliotArticlePage extends LitElement {
     }).format(d);
   }
 
+  private _renderByline() {
+    const DEFAULT_AUTHOR: Author = { name: 'Devliot', url: 'https://github.com/devliot' };
+    const authors = this._authors.length > 0 ? this._authors : [DEFAULT_AUTHOR];
+
+    const renderAuthor = (a: Author) =>
+      a.url
+        ? html`<a href="${a.url}" target="_blank" rel="noopener">${a.name}</a>`
+        : html`${a.name}`;
+
+    let formatted: unknown;
+    if (authors.length === 1) {
+      formatted = renderAuthor(authors[0]);
+    } else if (authors.length === 2) {
+      formatted = html`${renderAuthor(authors[0])} et ${renderAuthor(authors[1])}`;
+    } else {
+      const parts = authors.slice(0, -1).map((a, i) =>
+        i === 0 ? renderAuthor(a) : html`, ${renderAuthor(a)}`
+      );
+      formatted = html`${parts} et ${renderAuthor(authors[authors.length - 1])}`;
+    }
+
+    return html`<p class="article-byline">par ${formatted}</p>`;
+  }
+
   // D-04: popstate handler re-scrolls to ?section= heading on back/forward navigation
   private _onPopState = (): void => {
     const section = new URLSearchParams(window.location.search).get('section');
@@ -207,6 +234,7 @@ export class DevliotArticlePage extends LitElement {
           ${this._date ? html`<time datetime="${this._date}">${this._formatDate(this._date)}</time>` : ''}${this._date && this._readingTime > 0 ? html`\u00a0\u00b7\u00a0` : ''}${this._readingTime > 0 ? html`${this._readingTime} min read` : ''}
         </p>
       ` : ''}
+      ${this._renderByline()}
       <article>${unsafeHTML(this._html)}</article>
       ${this._tags.length > 0 || this._category ? html`
         <nav class="article-tags" aria-label="Article tags">

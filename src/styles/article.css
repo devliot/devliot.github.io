@@ -27,6 +27,18 @@ h1 {
   padding-right: var(--space-lg);
 }
 
+/* Byline line -- per Phase 9 UI-SPEC: author names below metadata */
+.article-byline {
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin-bottom: var(--space-md);
+  margin-top: 0;
+  padding-left: var(--space-lg);
+  padding-right: var(--space-lg);
+}
+
 /* Sub-headings — per UI-SPEC: h2/h3 at 20px semibold */
 h2, h3 {
   font-size: 20px;
