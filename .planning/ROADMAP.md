@@ -75,7 +75,7 @@ Plans:
 **Plans:** 2 plans
 Plans:
 - [x] 09-01-PLAN.md — Playwright test scaffold + author byline rendering in article page component
-- [ ] 09-02-PLAN.md — JSON-LD BlogPosting structured data in build-time OG pages
+- [x] 09-02-PLAN.md — JSON-LD BlogPosting structured data in build-time OG pages
 **UI hint**: yes
 
 ### Phase 10: Per-article Bibliography
