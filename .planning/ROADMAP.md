@@ -74,7 +74,7 @@ Plans:
   3. The OG page for an article with authors contains a valid `<script type="application/ld+json">` block with `@type: BlogPosting` and an `author` property listing the declared authors
 **Plans:** 2 plans
 Plans:
-- [ ] 09-01-PLAN.md — Playwright test scaffold + author byline rendering in article page component
+- [x] 09-01-PLAN.md — Playwright test scaffold + author byline rendering in article page component
 - [ ] 09-02-PLAN.md — JSON-LD BlogPosting structured data in build-time OG pages
 **UI hint**: yes
 
