@@ -147,7 +147,7 @@ code {
 }
 
 /* Links */
-a:not(.heading-anchor) {
+a:not(.heading-anchor):not(.citation-link):not(.ref-backlink) {
   color: var(--color-accent);
   text-decoration: underline;
 }

@@ -48,7 +48,14 @@ export class DevliotArticlePage extends LitElement {
       // Use microtask to ensure the DOM has been updated before processing headings
       this.updateComplete.then(() => {
         this._injectHeadingAnchors();
+        this._injectCitationLinks();
         this._scrollToSectionFromUrl();
+      });
+    }
+    // _bibliography arrives after _html (separate fetch) — re-run citation injection
+    if (changed.has('_bibliography') && this._bibliography.length > 0 && this._html) {
+      this.updateComplete.then(() => {
+        this._injectCitationLinks();
       });
     }
   }
@@ -156,6 +163,127 @@ export class DevliotArticlePage extends LitElement {
       });
 
       heading.prepend(anchor);
+    });
+  }
+
+  private _injectCitationLinks(): void {
+    const article = this.shadowRoot?.querySelector('article');
+    if (!article || !this._bibliography.length) return;
+
+    // Double-injection guard (mirrors heading anchor guard pattern)
+    if (article.querySelector('.citation-link')) return;
+
+    // Build id -> 1-based-index map from bibliography array order
+    const idToN = new Map<string, number>();
+    this._bibliography.forEach((entry, i) => idToN.set(entry.id, i + 1));
+
+    // Walk text nodes inside <article> — safe: never corrupts HTML attributes
+    // Filter: skip text nodes inside <code>, <pre>, or devliot-code elements (Pitfall 4)
+    const walker = document.createTreeWalker(
+      article,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode(node: Node): number {
+          let parent = node.parentElement;
+          while (parent && parent !== article) {
+            const tag = parent.tagName.toLowerCase();
+            if (tag === 'code' || tag === 'pre' || tag === 'devliot-code') {
+              return NodeFilter.FILTER_REJECT;
+            }
+            parent = parent.parentElement;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    // Collect replacements first, then process (avoid tree mutation during walk)
+    const replacements: Array<{ node: Text; matches: Array<{ id: string; n: number; index: number; length: number }> }> = [];
+    let textNode: Text | null;
+    while ((textNode = walker.nextNode() as Text | null)) {
+      const text = textNode.textContent || '';
+      // Match all [slug-style-id] patterns in the text node
+      const regex = /\[([a-z0-9][a-z0-9-]*)\]/g;
+      let match: RegExpExecArray | null;
+      const nodeMatches: Array<{ id: string; n: number; index: number; length: number }> = [];
+      while ((match = regex.exec(text)) !== null) {
+        const id = match[1];
+        const n = idToN.get(id);
+        if (n !== undefined) {
+          nodeMatches.push({ id, n, index: match.index, length: match[0].length });
+        }
+        // D-15: if id not in bibliography, skip (leave as plain text)
+      }
+      if (nodeMatches.length > 0) {
+        replacements.push({ node: textNode, matches: nodeMatches });
+      }
+    }
+
+    // Track which N values have already received a cite-N id (first occurrence only)
+    const assignedCiteIds = new Set<number>();
+
+    // Process replacements in reverse to avoid index invalidation
+    replacements.reverse().forEach(({ node, matches }) => {
+      // Process matches within the node in reverse order
+      const sortedMatches = [...matches].sort((a, b) => b.index - a.index);
+      let currentNode: Text = node;
+
+      sortedMatches.forEach(({ n, index, length }) => {
+        const text = currentNode.textContent || '';
+        const before = text.slice(0, index);
+        const after = text.slice(index + length);
+
+        // Create the citation anchor
+        const anchor = document.createElement('a');
+        anchor.className = 'citation-link';
+        anchor.href = `#ref-${n}`;
+        anchor.textContent = `[${n}]`;
+
+        // Only assign id="cite-N" to the first occurrence of each N (DOM id uniqueness)
+        if (!assignedCiteIds.has(n)) {
+          anchor.id = `cite-${n}`;
+          assignedCiteIds.add(n);
+        }
+
+        // Click handler: e.preventDefault() + scrollIntoView (Pitfall 5: shadow DOM hash nav)
+        anchor.addEventListener('click', (e: MouseEvent) => {
+          e.preventDefault();
+          const target = this.shadowRoot?.querySelector<HTMLElement>(`#ref-${CSS.escape(String(n))}`);
+          target?.scrollIntoView({ behavior: 'instant' });
+        });
+
+        // Split the text node and insert the anchor
+        const parent = currentNode.parentNode!;
+        const afterNode = document.createTextNode(after);
+        const beforeNode = document.createTextNode(before);
+
+        parent.insertBefore(beforeNode, currentNode);
+        parent.insertBefore(anchor, currentNode);
+        parent.insertBefore(afterNode, currentNode);
+        parent.removeChild(currentNode);
+
+        // Update currentNode reference for the next match in this text node
+        currentNode = beforeNode;
+      });
+    });
+
+    // D-13/D-16: Inject ↩ back-links into ref entries that have a matching cite-N in DOM
+    this._bibliography.forEach((_, i) => {
+      const n = i + 1;
+      const refEntry = this.shadowRoot?.querySelector<HTMLElement>(`#ref-${CSS.escape(String(n))}`);
+      const citeEl = this.shadowRoot?.querySelector<HTMLElement>(`#cite-${CSS.escape(String(n))}`);
+      // D-16: only add back-link if a matching cite-N exists in the article body
+      if (refEntry && citeEl) {
+        const backlink = document.createElement('a');
+        backlink.className = 'ref-backlink';
+        backlink.href = `#cite-${n}`;
+        backlink.textContent = ' \u21a9';
+        backlink.addEventListener('click', (e: MouseEvent) => {
+          e.preventDefault();
+          citeEl.scrollIntoView({ behavior: 'instant' });
+        });
+        refEntry.appendChild(backlink);
+      }
     });
   }
 
