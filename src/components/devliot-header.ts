@@ -77,18 +77,17 @@ export class DevliotHeader extends LitElement {
       return html`
         <div class="header-actions">
           <div class="search-container ${this._searchOpen ? 'search-container--open' : ''}">
-            ${this._searchOpen ? html`
-              <input
-                class="search-input"
-                type="text"
-                placeholder="Rechercher un article\u2026"
-                aria-label="Rechercher un article"
-                role="search"
-                .value=${this._searchValue}
-                @input=${this._onSearchInput}
-                @keydown=${this._onSearchKeydown}
-              />
-            ` : ''}
+            <input
+              class="search-input"
+              type="text"
+              placeholder="Rechercher un article\u2026"
+              aria-label="Rechercher un article"
+              role="search"
+              tabindex="${this._searchOpen ? 0 : -1}"
+              .value=${this._searchValue}
+              @input=${this._onSearchInput}
+              @keydown=${this._onSearchKeydown}
+            />
             <button
               class="search-btn"
               aria-label="Rechercher des articles"
