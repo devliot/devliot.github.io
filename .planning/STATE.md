@@ -4,14 +4,14 @@ milestone: v2.0
 milestone_name: — Deep links, épuration UI, attribution & discovery
 status: executing
 stopped_at: Phase 9 UI-SPEC approved
-last_updated: "2026-04-16T10:55:51.600Z"
-last_activity: 2026-04-16 -- Phase 09 execution started
+last_updated: "2026-04-16T11:10:30.362Z"
+last_activity: 2026-04-16
 progress:
   total_phases: 5
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 8
-  completed_plans: 6
-  percent: 75
+  completed_plans: 8
+  percent: 100
 ---
 
 # Project State
@@ -25,10 +25,10 @@ See: .planning/PROJECT.md (updated 2026-04-15)
 
 ## Current Position
 
-Phase: 09 (per-article-authors) — EXECUTING
-Plan: 1 of 2
+Phase: 10
+Plan: Not started
 Status: Executing Phase 09
-Last activity: 2026-04-16 -- Phase 09 execution started
+Last activity: 2026-04-16
 
 Progress: [----------] 0% (0/6 phases complete)
 
