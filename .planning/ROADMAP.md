@@ -87,9 +87,9 @@ Plans:
   2. Each reference entry renders in a format appropriate to its type (article, book, or web), including title, authors, year, and a clickable URL where provided
   3. An inline citation `[N]` in the article body is a link that scrolls to reference `[N]` in the references section
   4. Each reference entry has a back-link that scrolls to the inline citation in the article body
-**Plans:** 2 plans
+**Plans:** 1/2 plans executed
 Plans:
-- [ ] 10-01-PLAN.md — Playwright test scaffold + references section rendering + CSS
+- [x] 10-01-PLAN.md — Playwright test scaffold + references section rendering + CSS
 - [ ] 10-02-PLAN.md — Inline citation link transformation + bidirectional scroll + back-links
 **UI hint**: yes
 
@@ -116,7 +116,7 @@ Plans:
 | 7. Deep-linkable Anchors | v2.0 | 0/4 | Not started | - |
 | 8. UI Refresh | v2.0 | 0/2 | Not started | - |
 | 9. Per-article Authors | v2.0 | 0/2 | Not started | - |
-| 10. Per-article Bibliography | v2.0 | 0/2 | Not started | - |
+| 10. Per-article Bibliography | v2.0 | 1/2 | In Progress|  |
 | 11. Sitemap XML | v2.0 | 0/? | Not started | - |
 
 ---
