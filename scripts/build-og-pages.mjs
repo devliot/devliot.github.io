@@ -20,6 +20,42 @@ function escapeHtml(str) {
 }
 
 /**
+ * Build a JSON-LD schema.org/BlogPosting block for an article.
+ * Injected into og.html head at build time (D-06).
+ * Falls back to default Devliot author when article has no declared authors (D-04).
+ */
+function buildJsonLd(article, siteUrl) {
+  const DEFAULT_AUTHOR = { name: 'Devliot', url: 'https://github.com/devliot' };
+  const authors = (article.authors && article.authors.length > 0)
+    ? article.authors
+    : [DEFAULT_AUTHOR];
+
+  const authorNodes = authors.map(a => {
+    const node = { '@type': 'Person', name: a.name };
+    if (a.url) node.url = a.url;
+    return node;
+  });
+
+  const schema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: article.title,
+    datePublished: article.date,
+    author: authorNodes,
+    publisher: {
+      '@type': 'Organization',
+      name: 'DEVLIOT',
+      url: siteUrl
+    }
+  };
+
+  if (article.description) schema.description = article.description;
+  if (article.image) schema.image = `${siteUrl}/${article.image}`;
+
+  return `  <script type="application/ld+json">${JSON.stringify(schema)}</script>`;
+}
+
+/**
  * Operation A: Compute reading time for each article and write back to index.json.
  * Reads each article's HTML, strips tags, counts words, computes ceil(words / WPM).
  */
@@ -84,6 +120,8 @@ function generateOgPages() {
       ? `    <meta name="twitter:image" content="${imageUrl}" />\n`
       : '';
 
+    const jsonLd = buildJsonLd(article, SITE_URL);
+
     const html = `<!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -95,7 +133,8 @@ function generateOgPages() {
 ${descMeta}    <meta property="og:url" content="${articleUrl}" />
 ${ogImageMeta}    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="${title}" />
-${twitterDescMeta}${twitterImageMeta}  <script>window.location.replace(${JSON.stringify(redirectUrl)});</script>
+${twitterDescMeta}${twitterImageMeta}${jsonLd}
+  <script>window.location.replace(${JSON.stringify(redirectUrl)});</script>
 </head>
 <body></body>
 </html>
