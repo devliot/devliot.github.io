@@ -75,14 +75,15 @@ v2.0 requirements (detailed in REQUIREMENTS.md, mapped to phases in ROADMAP.md):
 
 ## Current State
 
-Shipped v1.0 MVP on 2026-04-14. v2.0 in progress — Phase 9 complete as of 2026-04-16.
+Shipped v1.0 MVP on 2026-04-14. v2.0 in progress — Phase 10 complete as of 2026-04-16.
 - Tech stack: Lit 3.3.1, Vite 8, Shiki 4, KaTeX 0.16, Mermaid 11, Chart.js 4, FlexSearch 0.7
-- 64 Playwright E2E tests across 7 test files (10 new per-article-authors tests added in Phase 9)
+- 79 Playwright E2E tests across 8 test files (15 new per-article-bibliography tests added in Phase 10)
 - Path-based SPA routing (`/article/{slug}?section={id}`) with `dist/404.html` fallback for GitHub Pages
 - White shell chrome with context-aware header (home = collapsible search, article = DEVLIOT logo); scroll-activated monochrome shadow; hamburger removed
 - Per-article author bylines ("par X et Y") with clickable links; JSON-LD BlogPosting structured data in OG pages
+- Per-article bibliography: numbered "Références" section with type-specific formatting (article/book/web), inline [N] citation links with bidirectional smooth-scroll navigation
 - 1 demo article (`01-demo-article`) showcasing all content types
-- Next: Phase 10 Per-article Bibliography — render bibliography entries from typed metadata
+- Next: Phase 11 Sitemap XML — build-time /sitemap.xml and robots.txt
 
 Last updated: 2026-04-16
 
