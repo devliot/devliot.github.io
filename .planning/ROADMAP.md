@@ -116,7 +116,7 @@ Plans:
 | 7. Deep-linkable Anchors | v2.0 | 0/4 | Not started | - |
 | 8. UI Refresh | v2.0 | 0/2 | Not started | - |
 | 9. Per-article Authors | v2.0 | 0/2 | Not started | - |
-| 10. Per-article Bibliography | v2.0 | 2/2 | Complete   | 2026-04-16 |
+| 10. Per-article Bibliography | v2.0 | 2/2 | Complete    | 2026-04-16 |
 | 11. Sitemap XML | v2.0 | 0/? | Not started | - |
 
 ---
