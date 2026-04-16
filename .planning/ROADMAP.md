@@ -72,7 +72,10 @@ Plans:
   1. An article with an `authors` array in `index.json` displays a byline with author name(s) alongside the publication date and reading time in the article header
   2. An article without an `authors` field renders its metadata line normally with no broken layout or placeholder text
   3. The OG page for an article with authors contains a valid `<script type="application/ld+json">` block with `@type: BlogPosting` and an `author` property listing the declared authors
-**Plans**: TBD
+**Plans:** 2 plans
+Plans:
+- [ ] 09-01-PLAN.md — Playwright test scaffold + author byline rendering in article page component
+- [ ] 09-02-PLAN.md — JSON-LD BlogPosting structured data in build-time OG pages
 **UI hint**: yes
 
 ### Phase 10: Per-article Bibliography
@@ -109,7 +112,7 @@ Plans:
 | 6. Data Schema Extension | v2.0 | 2/2 | Complete    | 2026-04-15 |
 | 7. Deep-linkable Anchors | v2.0 | 0/4 | Not started | - |
 | 8. UI Refresh | v2.0 | 0/2 | Not started | - |
-| 9. Per-article Authors | v2.0 | 0/? | Not started | - |
+| 9. Per-article Authors | v2.0 | 0/2 | Not started | - |
 | 10. Per-article Bibliography | v2.0 | 0/? | Not started | - |
 | 11. Sitemap XML | v2.0 | 0/? | Not started | - |
 
